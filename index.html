@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FootHub — Live Scores, Fixtures & Standings</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- FontAwesome Icons for football icons & interface -->
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
@@ -139,9 +139,80 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
+    /* ── HOMEPAGE HERO SECTION ───────────────────── */
+    .hero-section {
+      padding: 60px 24px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 79, 0, 0.1);
+      border: 1px solid rgba(255, 79, 0, 0.3);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-la);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 1px;
+      max-width: 800px;
+    }
+    .hero-title span { color: var(--accent-la); }
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--sub);
+      max-width: 600px;
+      line-height: 1.5;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .btn-primary {
+      background: var(--accent-la);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(255, 79, 0, 0.3);
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--sub); }
+
     /* ── LEAGUE TABS ─────────────────────────────── */
     .tabs-wrapper {
       background: var(--surface);
+      border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
       overflow-x: auto;
@@ -261,7 +332,7 @@
     }
 
     /* ── MAIN CONTAINER ──────────────────────────── */
-    main { padding: 0 24px 40px; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; }
+    main { padding: 0 24px 60px; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; }
 
     /* ── LEAGUE BANNER ───────────────────────────── */
     .league-banner {
@@ -736,6 +807,21 @@
   </div>
 </header>
 
+<!-- HOMEPAGE HERO SECTION -->
+<section class="hero-section">
+  <div class="hero-badge">
+    <i class="fa-solid fa-bolt"></i> Real-Time Telemetry & Standings
+  </div>
+  <h1 class="hero-title">Experience Football Like Never <span>Before</span></h1>
+  <p class="hero-subtitle">
+    Live score updates, tactical lineups, real-time match events, and detailed league standings built with precision design.
+  </p>
+  <div class="hero-cta-group">
+    <button class="btn-primary" onclick="document.getElementById('main-content').scrollIntoView({behavior: 'smooth'})">Explore Live Matches</button>
+    <button class="btn-secondary" onclick="switchView('standings')">View Standings</button>
+  </div>
+</section>
+
 <!-- LEAGUE TABS -->
 <div class="tabs-wrapper">
   <div class="tabs" id="leagueTabs">
@@ -797,703 +883,544 @@
 <!-- MATCH DETAIL MODAL -->
 <div class="modal-backdrop" id="matchModal" onclick="closeModalOnBackdrop(event)">
   <div class="modal-container" id="modalContainer">
-    <!-- Header -->
     <div class="modal-header">
-      <button class="modal-close-btn" onclick="closeMatchModal()"><i class="fa-solid fa-xmark"></i></button>
-      <div class="modal-match-meta" id="modalMeta">La Liga · Matchday 36 · Santiago Bernabéu</div>
-      
+      <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-match-meta" id="modalMatchMeta">League • Venue</div>
       <div class="modal-scoreboard">
         <div class="modal-team">
-          <div class="modal-team-badge" id="modalHomeEmoji">👑</div>
-          <div class="modal-team-name" id="modalHomeName">Real Madrid</div>
+          <div class="modal-team-badge" id="modalHomeBadge">⚽</div>
+          <div class="modal-team-name" id="modalHomeName">Home Team</div>
         </div>
-
         <div class="match-center">
           <div class="score-box" id="modalScoreBox">
-            <span class="score-num" id="modalHomeScore" style="color:var(--live)">2</span>
+            <span class="score-num" id="modalHomeScore">0</span>
             <span class="score-sep">-</span>
-            <span class="score-num" id="modalAwayScore" style="color:var(--live)">1</span>
+            <span class="score-num" id="modalAwayScore">0</span>
           </div>
-          <div class="status-pill live" id="modalStatusPill">74'</div>
+          <div class="status-pill live" id="modalStatusPill">LIVE 74'</div>
         </div>
-
         <div class="modal-team">
-          <div class="modal-team-badge" id="modalAwayEmoji">🔵🔴</div>
-          <div class="modal-team-name" id="modalAwayName">FC Barcelona</div>
+          <div class="modal-team-badge" id="modalAwayBadge">⚽</div>
+          <div class="modal-team-name" id="modalAwayName">Away Team</div>
         </div>
       </div>
     </div>
-
-    <!-- Modal Tabs -->
     <div class="modal-tabs">
-      <button class="modal-tab active" data-pane="overview" onclick="switchModalTab('overview')">Overview</button>
-      <button class="modal-tab" data-pane="stats" onclick="switchModalTab('stats')">Match Stats</button>
-      <button class="modal-tab" data-pane="lineups" onclick="switchModalTab('lineups')">Lineups</button>
-      <button class="modal-tab" data-pane="commentary" onclick="switchModalTab('commentary')">Live Commentary</button>
+      <button class="modal-tab active" onclick="switchModalTab('timeline')">Timeline</button>
+      <button class="modal-tab" onclick="switchModalTab('stats')">Match Stats</button>
+      <button class="modal-tab" onclick="switchModalTab('lineups')">Lineups</button>
+      <button class="modal-tab" onclick="switchModalTab('commentary')">Live Commentary</button>
     </div>
-
-    <!-- Modal Body -->
     <div class="modal-body">
-      <!-- OVERVIEW PANE -->
-      <div class="modal-pane active" id="pane-overview">
-        <div class="timeline" id="modalTimeline"></div>
+      <div class="modal-pane active" id="pane-timeline">
+        <div class="timeline" id="modalTimelineList"></div>
       </div>
-
-      <!-- STATS PANE -->
       <div class="modal-pane" id="pane-stats">
-        <div class="stats-list" id="modalStats"></div>
+        <div class="stats-list" id="modalStatsList"></div>
       </div>
-
-      <!-- LINEUPS PANE -->
       <div class="modal-pane" id="pane-lineups">
-        <div class="pitch-container" id="modalPitch"></div>
+        <div class="pitch-container" id="modalPitch">
+          <div class="pitch-line-center"></div>
+          <div class="pitch-circle"></div>
+          <div class="pitch-half" id="awayLineupHalf"></div>
+          <div class="pitch-half" id="homeLineupHalf"></div>
+        </div>
       </div>
-
-      <!-- COMMENTARY PANE -->
       <div class="modal-pane" id="pane-commentary">
-        <div class="commentary-feed" id="modalCommentary"></div>
+        <div class="commentary-feed" id="modalCommentaryFeed"></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ── DATA STORE ─────────────────────────────────────────────────────────────
-const DATABASE = {
-  laliga: {
-    name: "La Liga",
-    country: "Spain",
-    emoji: "🇪🇸",
-    color: "#ff4f00",
-    season: "2025/26",
-    matches: [
-      { id: 1, home: "Real Madrid", homeEmoji: "👑", away: "FC Barcelona", awayEmoji: "🔵🔴", scoreH: 2, scoreA: 1, status: "live", minute: 76, date: "09 Jun 2026", time: "20:00", venue: "Santiago Bernabéu", round: "Matchday 36", homeFormation: "4-3-3", awayFormation: "4-2-3-1" },
-      { id: 2, home: "Atletico Madrid", homeEmoji: "🔴⬜", away: "Sevilla", awayEmoji: "⚪🔴", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "10 Jun 2026", time: "19:00", venue: "Metropolitano", round: "Matchday 36" },
-      { id: 3, home: "Valencia", homeEmoji: "🦇", away: "Villarreal", awayEmoji: "💛", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "10 Jun 2026", time: "21:00", venue: "Mestalla", round: "Matchday 36" },
-      { id: 4, home: "Real Betis", homeEmoji: "🟢⬜", away: "Real Sociedad", awayEmoji: "💙🤍", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "11 Jun 2026", time: "18:30", venue: "Benito Villamarín", round: "Matchday 36" },
-      { id: 5, home: "Athletic Bilbao", homeEmoji: "🦁🔴", away: "Granada", awayEmoji: "🔴", scoreH: 3, scoreA: 0, status: "finished", minute: null, date: "07 Jun 2026", time: "20:00", venue: "San Mamés", round: "Matchday 35" },
-      { id: 6, home: "Celta Vigo", homeEmoji: "🔵⬜", away: "Rayo Vallecano", awayEmoji: "⬜🔴", scoreH: 1, scoreA: 1, status: "finished", minute: null, date: "07 Jun 2026", time: "18:00", venue: "Balaídos", round: "Matchday 35" }
-    ],
-    standings: [
-      { rank: 1, team: "Real Madrid", emoji: "👑", mp: 35, w: 27, d: 5, l: 3, gf: 82, ga: 26, pts: 86, form: ['W','W','D','W','W'] },
-      { rank: 2, team: "FC Barcelona", emoji: "🔵🔴", mp: 35, w: 25, d: 4, l: 6, gf: 79, ga: 34, pts: 79, form: ['W','L','W','W','D'] },
-      { rank: 3, team: "Girona", emoji: "🔴⬜", mp: 35, w: 22, d: 5, l: 8, gf: 71, ga: 44, pts: 71, form: ['L','W','W','D','W'] },
-      { rank: 4, team: "Atletico Madrid", emoji: "🔴⬜", mp: 35, w: 21, d: 7, l: 7, gf: 64, ga: 38, pts: 70, form: ['W','W','L','W','D'] },
-      { rank: 5, team: "Athletic Bilbao", emoji: "🦁🔴", mp: 35, w: 18, d: 11, l: 6, gf: 58, ga: 35, pts: 65, form: ['W','D','W','D','W'] },
-      { rank: 6, team: "Real Sociedad", emoji: "💙🤍", mp: 35, w: 15, d: 12, l: 8, gf: 48, ga: 36, pts: 57, form: ['D','W','L','W','L'] },
-      { rank: 7, team: "Real Betis", emoji: "🟢⬜", mp: 35, w: 14, d: 13, l: 8, gf: 46, ga: 42, pts: 55, form: ['W','L','D','W','W'] },
-      { rank: 8, team: "Valencia", emoji: "🦇", mp: 35, w: 13, d: 9, l: 13, gf: 39, ga: 41, pts: 48, form: ['L','D','W','L','L'] }
-    ]
-  },
-  epl: {
-    name: "Premier League",
-    country: "England",
-    emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    color: "#e90052",
-    season: "2025/26",
-    matches: [
-      { id: 7, home: "Arsenal", homeEmoji: "🔴⬜", away: "Man City", awayEmoji: "🔵", scoreH: 1, scoreA: 1, status: "live", minute: 62, date: "09 Jun 2026", time: "16:30", venue: "Emirates Stadium", round: "GW 37", homeFormation: "4-3-3", awayFormation: "3-2-4-1" },
-      { id: 8, home: "Chelsea", homeEmoji: "💙", away: "Tottenham", awayEmoji: "🤍", scoreH: 0, scoreA: 2, status: "live", minute: 84, date: "09 Jun 2026", time: "16:30", venue: "Stamford Bridge", round: "GW 37", homeFormation: "4-2-3-1", awayFormation: "4-3-3" },
-      { id: 9, home: "Liverpool", homeEmoji: "🔴", away: "Man Utd", awayEmoji: "🔴🔴", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "10 Jun 2026", time: "20:00", venue: "Anfield", round: "GW 37" },
-      { id: 10, home: "Newcastle", homeEmoji: "⬛⬜", away: "Aston Villa", awayEmoji: "🟣🔵", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "10 Jun 2026", time: "17:30", venue: "St. James' Park", round: "GW 37" },
-      { id: 11, home: "Everton", homeEmoji: "💙", away: "Burnley", awayEmoji: "🟣", scoreH: 2, scoreA: 0, status: "finished", minute: null, date: "07 Jun 2026", time: "15:00", venue: "Goodison Park", round: "GW 36" }
-    ],
-    standings: [
-      { rank: 1, team: "Man City", emoji: "🔵", mp: 36, w: 27, d: 5, l: 4, gf: 88, ga: 32, pts: 86, form: ['W','W','W','D','W'] },
-      { rank: 2, team: "Arsenal", emoji: "🔴⬜", mp: 36, w: 26, d: 7, l: 3, gf: 85, ga: 28, pts: 85, form: ['W','D','W','W','W'] },
-      { rank: 3, team: "Liverpool", emoji: "🔴", mp: 36, w: 23, d: 9, l: 4, gf: 81, ga: 39, pts: 78, form: ['D','W','L','W','W'] },
-      { rank: 4, team: "Aston Villa", emoji: "🟣🔵", mp: 36, w: 20, d: 8, l: 8, gf: 71, ga: 50, pts: 68, form: ['W','L','W','D','W'] },
-      { rank: 5, team: "Tottenham", emoji: "🤍", mp: 36, w: 19, d: 6, l: 11, gf: 69, ga: 54, pts: 63, form: ['L','W','W','L','W'] },
-      { rank: 6, team: "Chelsea", emoji: "💙", mp: 36, w: 17, d: 9, l: 10, gf: 66, ga: 56, pts: 60, form: ['W','D','L','W','D'] },
-      { rank: 7, team: "Newcastle", emoji: "⬛⬜", mp: 36, w: 17, d: 6, l: 13, gf: 74, ga: 57, pts: 57, form: ['L','W','W','L','L'] }
-    ]
-  },
-  ucl: {
-    name: "UEFA Champions League",
-    country: "Europe",
-    emoji: "⭐",
-    color: "#3b82f6",
-    season: "2025/26",
-    matches: [
-      { id: 12, home: "Real Madrid", homeEmoji: "👑", away: "PSG", awayEmoji: "🔵🔴", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "15 Jun 2026", time: "21:00", venue: "Allianz Arena, Munich", round: "Final" },
-      { id: 13, home: "Arsenal", homeEmoji: "🔴⬜", away: "Real Madrid", awayEmoji: "👑", scoreH: 1, scoreA: 2, status: "finished", minute: null, date: "07 May 2026", time: "21:00", venue: "Emirates Stadium", round: "SF 2nd Leg" },
-      { id: 14, home: "PSG", homeEmoji: "🔵🔴", away: "Dortmund", awayEmoji: "🟡⬛", scoreH: 2, scoreA: 0, status: "finished", minute: null, date: "06 May 2026", time: "21:00", venue: "Parc des Princes", round: "SF 2nd Leg" }
-    ],
-    standings: [
-      { rank: 1, team: "Real Madrid", emoji: "👑", mp: 12, w: 9, d: 2, l: 1, gf: 28, ga: 12, pts: 29, form: ['W','W','D','W','W'] },
-      { rank: 2, team: "PSG", emoji: "🔵🔴", mp: 12, w: 8, d: 2, l: 2, gf: 24, ga: 10, pts: 26, form: ['W','W','W','L','W'] },
-      { rank: 3, team: "Arsenal", emoji: "🔴⬜", mp: 12, w: 7, d: 3, l: 2, gf: 22, ga: 11, pts: 24, form: ['L','W','D','W','W'] },
-      { rank: 4, team: "Dortmund", emoji: "🟡⬛", mp: 12, w: 6, d: 2, l: 4, gf: 19, ga: 15, pts: 20, form: ['L','L','W','W','D'] }
-    ]
-  },
-  bundesliga: {
-    name: "Bundesliga",
-    country: "Germany",
-    emoji: "🇩🇪",
-    color: "#d97706",
-    season: "2025/26",
-    matches: [
-      { id: 15, home: "Bayern Munich", homeEmoji: "🔴🤍", away: "Dortmund", awayEmoji: "🟡⬛", scoreH: 3, scoreA: 2, status: "live", minute: 81, date: "09 Jun 2026", time: "18:30", venue: "Allianz Arena", round: "Matchday 34" },
-      { id: 16, home: "Leverkusen", homeEmoji: "🔴⬛", away: "RB Leipzig", awayEmoji: "⚪🔴", scoreH: 2, scoreA: 0, status: "finished", minute: null, date: "08 Jun 2026", time: "15:30", venue: "BayArena", round: "Matchday 34" }
-    ],
-    standings: [
-      { rank: 1, team: "Bayer Leverkusen", emoji: "🔴⬛", mp: 34, w: 28, d: 6, l: 0, gf: 89, ga: 24, pts: 90, form: ['W','W','W','W','W'] },
-      { rank: 2, team: "Bayern Munich", emoji: "🔴🤍", mp: 34, w: 23, d: 3, l: 8, gf: 94, ga: 45, pts: 72, form: ['W','L','W','W','L'] },
-      { rank: 3, team: "VfB Stuttgart", emoji: "⚪🔴", mp: 34, w: 23, d: 4, l: 7, gf: 78, ga: 39, pts: 73, form: ['W','W','D','W','W'] },
-      { rank: 4, team: "RB Leipzig", emoji: "⚪🔴", mp: 34, w: 19, d: 8, l: 7, gf: 77, ga: 39, pts: 65, form: ['L','D','W','W','W'] }
-    ]
-  },
-  seriea: {
-    name: "Serie A",
-    country: "Italy",
-    emoji: "🇮🇹",
-    color: "#06b6d4",
-    season: "2025/26",
-    matches: [
-      { id: 17, home: "Inter Milan", homeEmoji: "🔵⬛", away: "AC Milan", awayEmoji: "🔴⬛", scoreH: 1, scoreA: 0, status: "live", minute: 48, date: "09 Jun 2026", time: "20:45", venue: "San Siro", round: "Matchday 38" },
-      { id: 18, home: "Juventus", homeEmoji: "⚪⬛", away: "Napoli", awayEmoji: "🔵", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "11 Jun 2026", time: "20:45", venue: "Allianz Stadium", round: "Matchday 38" }
-    ],
-    standings: [
-      { rank: 1, team: "Inter Milan", emoji: "🔵⬛", mp: 38, w: 29, d: 7, l: 2, gf: 89, ga: 22, pts: 94, form: ['W','W','W','D','W'] },
-      { rank: 2, team: "AC Milan", emoji: "🔴⬛", mp: 38, w: 22, d: 9, l: 7, gf: 76, ga: 49, pts: 75, form: ['D','W','L','W','W'] },
-      { rank: 3, team: "Juventus", emoji: "⚪⬛", mp: 38, w: 19, d: 14, l: 5, gf: 54, ga: 31, pts: 71, form: ['W','D','D','W','D'] }
-    ]
-  },
-  ligue1: {
-    name: "Ligue 1",
-    country: "France",
-    emoji: "🇫🇷",
-    color: "#a855f7",
-    season: "2025/26",
-    matches: [
-      { id: 19, home: "PSG", homeEmoji: "🔵🔴", away: "Marseille", awayEmoji: "⚪🔵", scoreH: 3, scoreA: 1, status: "finished", minute: null, date: "06 Jun 2026", time: "21:00", venue: "Parc des Princes", round: "Matchday 34" },
-      { id: 20, home: "Monaco", homeEmoji: "🔴⚪", away: "Lyon", awayEmoji: "🔵🔴", scoreH: 2, scoreA: 2, status: "finished", minute: null, date: "06 Jun 2026", time: "21:00", venue: "Stade Louis II", round: "Matchday 34" }
-    ],
-    standings: [
-      { rank: 1, team: "PSG", emoji: "🔵🔴", mp: 34, w: 24, d: 4, l: 6, gf: 81, ga: 33, pts: 76, form: ['W','W','L','W','W'] },
-      { rank: 2, team: "Monaco", emoji: "🔴⚪", mp: 34, w: 20, d: 7, l: 7, gf: 68, ga: 42, pts: 67, form: ['D','W','W','L','W'] }
-    ]
-  },
-  wc: {
-    name: "FIFA World Cup 2026",
-    country: "USA / Canada / Mexico",
-    emoji: "🌍",
-    color: "#22c55e",
-    season: "2026",
-    matches: [
-      { id: 21, home: "Brazil", homeEmoji: "🇧🇷", away: "Mexico", awayEmoji: "🇲🇽", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "12 Jun 2026", time: "18:00", venue: "MetLife Stadium, NJ", round: "Group G" },
-      { id: 22, home: "Argentina", homeEmoji: "🇦🇷", away: "Saudi Arabia", awayEmoji: "🇸🇦", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "12 Jun 2026", time: "21:00", venue: "SoFi Stadium, LA", round: "Group C" },
-      { id: 23, home: "England", homeEmoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Serbia", awayEmoji: "🇷🇸", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "13 Jun 2026", time: "15:00", venue: "AT&T Stadium, TX", round: "Group A" },
-      { id: 24, home: "France", homeEmoji: "🇫🇷", away: "Poland", awayEmoji: "🇵🇱", scoreH: null, scoreA: null, status: "upcoming", minute: null, date: "13 Jun 2026", time: "18:00", venue: "Rose Bowl, Pasadena", round: "Group D" }
-    ],
-    standings: [
-      { rank: 1, team: "Argentina", emoji: "🇦🇷", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] },
-      { rank: 2, team: "Brazil", emoji: "🇧🇷", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] },
-      { rank: 3, team: "France", emoji: "🇫🇷", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] },
-      { rank: 4, team: "England", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }
-    ]
+  // ── APP DATA & STATE ──────────────────────────
+  const leaguesData = {
+    laliga: {
+      name: "La Liga EA Sports",
+      icon: "🇪🇸",
+      sub: "Spain • Matchday 28 of 38",
+      stats: { matches: "280 Played", goals: "742 Goals", avg: "2.65 G/M" },
+      matches: [
+        { id: "ll1", day: "Today", time: "FT", status: "finished", home: "Real Madrid", homeEmoji: "👑", homeScore: 3, away: "FC Barcelona", awayEmoji: "🔴", awayScore: 2, venue: "Santiago Bernabéu", referee: "Gil Manzano", homeRec: "21-4-3", awayRec: "20-5-3", stats: { possession: [52, 48], shots: [16, 14], onTarget: [8, 6], fouls: [11, 13], yellow: [2, 3] }, timeline: [{min: 14, type: 'goal', team: 'home', player: 'Vini Jr.'}, {min: 38, type: 'goal', team: 'away', player: 'Raphinha'}, {min: 67, type: 'goal', team: 'home', player: 'J. Bellingham'}, {min: 82, type: 'goal', team: 'away', player: 'F. Torres'}, {min: 90, type: 'goal', team: 'home', player: 'K. Mbappé'}], commentary: [{min: 90, type: 'goal', text: "Incredible winner by Kylian Mbappé in the dying seconds!"}, {min: 82, type: 'goal', text: "Ferran Torres equalizes for Barca from close range!"}] },
+        { id: "ll2", day: "Today", time: "74'", status: "live", home: "Atlético Madrid", homeEmoji: "⚪", homeScore: 1, away: "Real Sociedad", awayEmoji: "🔵", awayScore: 1, venue: "Cívitas Metropolitano", referee: "Mateu Lahoz", homeRec: "17-7-4", awayRec: "13-7-8", stats: { possession: [49, 51], shots: [11, 10], onTarget: [4, 4], fouls: [14, 10], yellow: [3, 1] }, timeline: [{min: 22, type: 'goal', team: 'home', player: 'A. Griezmann'}, {min: 55, type: 'goal', team: 'away', player: 'M. Oyarzabal'}], commentary: [{min: 55, type: 'goal', text: "Oyarzabal places it neatly into the bottom corner!"}, {min: 22, type: 'goal', text: "Griezmann opens the scoring against his former club."}] },
+        { id: "ll3", day: "Tomorrow", time: "21:00", status: "upcoming", home: "Villarreal", homeEmoji: "🟡", homeScore: 0, away: "Sevilla FC", awayEmoji: "🔴", awayScore: 0, venue: "Estadio de la Cerámica", referee: "Soto Grado", homeRec: "11-8-9", awayRec: "9-9-10", stats: { possession: [50, 50], shots: [0, 0], onTarget: [0, 0], fouls: [0, 0], yellow: [0, 0] }, timeline: [], commentary: [{min: 0, type: 'info', text: "Match scheduled to begin tomorrow at 21:00 CET."}] }
+      ],
+      standings: [
+        { rank: 1, name: "Real Madrid", emoji: "👑", p: 28, w: 22, d: 4, l: 2, gf: 65, ga: 22, pts: 70, form: ["W","W","W","D","W"] },
+        { rank: 2, name: "FC Barcelona", emoji: "🔴", p: 28, w: 20, d: 5, l: 3, gf: 62, ga: 28, pts: 65, form: ["W","L","W","W","W"] },
+        { rank: 3, name: "Girona FC", emoji: "⚪", p: 28, w: 18, d: 5, l: 5, gf: 55, ga: 33, pts: 59, form: ["D","W","L","W","D"] },
+        { rank: 4, name: "Atlético Madrid", emoji: "🔴", p: 28, w: 17, d: 7, l: 4, gf: 50, ga: 26, pts: 58, form: ["W","D","W","L","W"] },
+        { rank: 5, name: "Athletic Club", emoji: "🦁", p: 28, w: 15, d: 8, l: 5, gf: 46, ga: 24, pts: 53, form: ["W","W","D","W","L"] }
+      ]
+    },
+    epl: {
+      name: "Premier League",
+      icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      sub: "England • Matchday 29 of 38",
+      stats: { matches: "290 Played", goals: "860 Goals", avg: "2.96 G/M" },
+      matches: [
+        { id: "pl1", day: "Today", time: "FT", status: "finished", home: "Arsenal", homeEmoji: "🔴", homeScore: 2, away: "Manchester City", awayEmoji: "⚡", awayScore: 2, venue: "Emirates Stadium", referee: "Michael Oliver", homeRec: "20-5-4", awayRec: "20-6-3", stats: { possession: [44, 56], shots: [12, 15], onTarget: [5, 6], fouls: [10, 11], yellow: [2, 2] }, timeline: [{min: 19, type: 'goal', team: 'home', player: 'B. Saka'}, {min: 45, type: 'goal', team: 'away', player: 'E. Haaland'}, {min: 71, type: 'goal', team: 'home', player: 'G. Martinelli'}, {min: 88, type: 'goal', team: 'away', player: 'K. De Bruyne'}], commentary: [{min: 88, type: 'goal', text: "De Bruyne rockets one in from outside the box!"}, {min: 71, type: 'goal', text: "Martinelli taps in after a swift counter-attack."}] },
+        { id: "pl2", day: "Today", time: "82'", status: "live", home: "Liverpool", homeEmoji: "🔴", homeScore: 3, away: "Chelsea", awayEmoji: "🔵", awayScore: 1, venue: "Anfield", referee: "Anthony Taylor", homeRec: "21-5-3", awayRec: "13-8-8", stats: { possession: [58, 42], shots: [18, 9], onTarget: [9, 3], fouls: [8, 12], yellow: [1, 3] }, timeline: [{min: 10, type: 'goal', team: 'home', player: 'M. Salah'}, {min: 34, type: 'goal', team: 'home', player: 'D. Núñez'}, {min: 52, type: 'goal', team: 'away', player: 'C. Palmer'}, {min: 79, type: 'goal', team: 'home', player: 'L. Díaz'}], commentary: [{min: 79, type: 'goal', text: "Luis Diaz seals it with a header at the back post!"}] }
+      ],
+      standings: [
+        { rank: 1, name: "Liverpool", emoji: "🔴", p: 29, w: 21, d: 5, l: 3, gf: 68, ga: 26, pts: 68, form: ["W","W","W","D","W"] },
+        { rank: 2, name: "Arsenal", emoji: "🔴", p: 29, w: 20, d: 5, l: 4, gf: 66, ga: 24, pts: 65, form: ["W","W","D","W","W"] },
+        { rank: 3, name: "Manchester City", emoji: "⚡", p: 29, w: 20, d: 6, l: 3, gf: 67, ga: 28, pts: 66, form: ["W","D","W","W","D"] },
+        { rank: 4, name: "Aston Villa", emoji: "🦁", p: 29, w: 17, d: 5, l: 7, gf: 55, ga: 38, pts: 56, form: ["L","W","W","L","W"] },
+        { rank: 5, name: "Tottenham", emoji: "⚪", p: 29, w: 16, d: 5, l: 8, gf: 58, ga: 42, pts: 53, form: ["W","L","W","W","L"] }
+      ]
+    },
+    ucl: {
+      name: "UEFA Champions League",
+      icon: "⭐",
+      sub: "Europe • Quarter-Finals 1st Leg",
+      stats: { matches: "124 Played", goals: "389 Goals", avg: "3.14 G/M" },
+      matches: [
+        { id: "ucl1", day: "Today", time: "FT", status: "finished", home: "Bayern Munich", homeEmoji: "🔴", homeScore: 2, away: "Paris Saint-Germain", awayEmoji: "🔵", awayScore: 2, venue: "Allianz Arena", referee: "Szymon Marciniak", homeRec: "7-1-1", awayRec: "6-2-2", stats: { possession: [51, 49], shots: [15, 14], onTarget: [7, 7], fouls: [12, 10], yellow: [2, 2] }, timeline: [{min: 29, type: 'goal', team: 'home', player: 'H. Kane'}, {min: 44, type: 'goal', team: 'away', player: 'O. Dembélé'}, {min: 61, type: 'goal', team: 'home', player: 'J. Musiala'}, {min: 85, type: 'goal', team: 'away', player: 'K. Mbappé'}], commentary: [{min: 85, type: 'goal', text: "Late equalizer by PSG! Mbappé strikes from the edge of the box."}] }
+      ],
+      standings: [
+        { rank: 1, name: "Real Madrid", emoji: "👑", p: 10, w: 8, d: 2, l: 0, gf: 24, ga: 10, pts: 26, form: ["W","W","D","W","W"] },
+        { rank: 2, name: "Bayern Munich", emoji: "🔴", p: 10, w: 7, d: 3, l: 0, gf: 27, ga: 11, pts: 24, form: ["W","D","W","W","D"] },
+        { rank: 3, name: "Manchester City", emoji: "⚡", p: 10, w: 7, d: 2, l: 1, gf: 26, ga: 12, pts: 23, form: ["W","W","W","L","W"] },
+        { rank: 4, name: "Arsenal", emoji: "🔴", p: 10, w: 6, d: 3, l: 1, gf: 21, ga: 8, pts: 21, form: ["W","D","W","W","D"] }
+      ]
+    },
+    bundesliga: {
+      name: "Bundesliga",
+      icon: "🇩🇪",
+      sub: "Germany • Matchday 26 of 34",
+      stats: { matches: "234 Played", goals: "780 Goals", avg: "3.33 G/M" },
+      matches: [
+        { id: "bl1", day: "Today", time: "FT", status: "finished", home: "Bayer Leverkusen", homeEmoji: "🔴", homeScore: 3, away: "Borussia Dortmund", awayEmoji: "🟡", awayScore: 1, venue: "BayArena", referee: "Felix Zwayer", homeRec: "22-3-0", awayRec: "14-6-5", stats: { possession: [55, 45], shots: [17, 10], onTarget: [9, 4], fouls: [9, 14], yellow: [1, 4] }, timeline: [{min: 18, type: 'goal', team: 'home', player: 'F. Wirtz'}, {min: 40, type: 'goal', team: 'away', player: 'D. Malen'}, {min: 65, type: 'goal', team: 'home', player: 'V. Boniface'}, {min: 80, type: 'goal', team: 'home', player: 'A. Grimaldo'}], commentary: [{min: 80, type: 'goal', text: "Grimaldo curls in an exquisite free-kick!"}] }
+      ],
+      standings: [
+        { rank: 1, name: "Bayer Leverkusen", emoji: "🔴", p: 26, w: 22, d: 4, l: 0, gf: 66, ga: 18, pts: 70, form: ["W","W","W","W","W"] },
+        { rank: 2, name: "Bayern Munich", emoji: "🔴", p: 26, w: 19, d: 3, l: 4, gf: 78, ga: 31, pts: 60, form: ["W","L","W","W","D"] },
+        { rank: 3, name: "VfB Stuttgart", emoji: "⚪", p: 26, w: 17, d: 2, l: 7, gf: 60, ga: 34, pts: 53, form: ["W","W","D","W","W"] }
+      ]
+    },
+    seriea: {
+      name: "Serie A",
+      icon: "🇮🇹",
+      sub: "Italy • Matchday 29 of 38",
+      stats: { matches: "290 Played", goals: "710 Goals", avg: "2.45 G/M" },
+      matches: [
+        { id: "sa1", day: "Today", time: "FT", status: "finished", home: "Inter Milan", homeEmoji: "🔵", homeScore: 2, away: "Juventus", awayEmoji: "🦓", awayScore: 1, venue: "San Siro", referee: "Daniele Orsato", homeRec: "24-4-1", awayRec: "17-8-4", stats: { possession: [53, 47], shots: [14, 11], onTarget: [6, 4], fouls: [12, 13], yellow: [2, 3] }, timeline: [{min: 30, type: 'goal', team: 'home', player: 'L. Martínez'}, {min: 58, type: 'goal', team: 'away', player: 'D. Vlahović'}, {min: 78, type: 'goal', team: 'home', player: 'H. Çalhanoğlu'}], commentary: [{min: 78, type: 'goal', text: "Calhanoglu scores from the penalty spot!"}] }
+      ],
+      standings: [
+        { rank: 1, name: "Inter Milan", emoji: "🔵", p: 29, w: 24, d: 4, l: 1, gf: 71, ga: 13, pts: 76, form: ["W","W","W","W","W"] },
+        { rank: 2, name: "AC Milan", emoji: "🔴", p: 29, w: 19, d: 5, l: 5, gf: 57, ga: 32, pts: 62, form: ["W","D","W","W","L"] },
+        { rank: 3, name: "Juventus", emoji: "🦓", p: 29, w: 17, d: 8, l: 4, gf: 44, ga: 23, pts: 59, form: ["D","W","L","W","D"] }
+      ]
+    },
+    ligue1: {
+      name: "Ligue 1 McDonald's",
+      icon: "🇫🇷",
+      sub: "France • Matchday 27 of 34",
+      stats: { matches: "243 Played", goals: "720 Goals", avg: "2.96 G/M" },
+      matches: [
+        { id: "l1_1", day: "Today", time: "FT", status: "finished", home: "Paris Saint-Germain", homeEmoji: "🔵", homeScore: 4, away: "Marseille", awayEmoji: "⚪", awayScore: 0, venue: "Parc des Princes", referee: "Benoît Bastien", homeRec: "19-7-1", awayRec: "11-6-10", stats: { possession: [62, 38], shots: [20, 8], onTarget: [10, 2], fouls: [8, 15], yellow: [1, 4] }, timeline: [{min: 12, type: 'goal', team: 'home', player: 'K. Mbappé'}, {min: 35, type: 'goal', team: 'home', player: 'O. Dembélé'}, {min: 60, type: 'goal', team: 'home', player: 'R. Kolo Muani'}, {min: 88, type: 'goal', team: 'home', player: 'Gonçalo Ramos'}], commentary: [{min: 88, type: 'goal', text: "Ramos caps off a masterclass victory for PSG."}] }
+      ],
+      standings: [
+        { rank: 1, name: "Paris Saint-Germain", emoji: "🔵", p: 27, w: 19, d: 7, l: 1, gf: 64, ga: 20, pts: 64, form: ["W","W","W","D","W"] },
+        { rank: 2, name: "Brest", emoji: "🔴", p: 27, w: 13, d: 7, l: 7, gf: 35, ga: 23, pts: 46, form: ["W","D","W","L","W"] },
+        { rank: 3, name: "Monaco", emoji: "🔴", p: 27, w: 13, d: 6, l: 8, gf: 45, ga: 35, pts: 45, form: ["D","W","L","W","W"] }
+      ]
+    },
+    wc: {
+      name: "FIFA World Cup 2026",
+      icon: "🌍",
+      sub: "Global • Group Stage Matchday 1",
+      stats: { matches: "0 Played", goals: "0 Goals", avg: "0.0 G/M" },
+      matches: [
+        { id: "wc1", day: "June 11", time: "18:00", status: "upcoming", home: "Mexico", homeEmoji: "🇲🇽", homeScore: 0, away: "South Africa", awayEmoji: "🇿🇦", awayScore: 0, venue: "Estadio Azteca, Mexico City", referee: "TBD", homeRec: "Group A", awayRec: "Group A", stats: { possession: [50, 50], shots: [0, 0], onTarget: [0, 0], fouls: [0, 0], yellow: [0, 0] }, timeline: [], commentary: [{min: 0, type: 'info', text: "Opening match of the 2026 FIFA World Cup."}] }
+      ],
+      standings: [
+        { rank: 1, name: "Mexico", emoji: "🇲🇽", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] },
+        { rank: 2, name: "South Africa", emoji: "🇿🇦", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }
+      ]
+    }
+  };
+
+  let currentLeague = "laliga";
+  let currentView = "matches"; // 'matches' or 'standings'
+  let currentFilter = "all";   // 'all', 'live', 'upcoming', 'finished'
+  let searchQuery = "";
+  let isSimulating = true;
+  let simulationTimer = null;
+  let activeMatchModal = null;
+
+  // ── INITIALIZATION & DATE ─────────────────────
+  document.addEventListener("DOMContentLoaded", () => {
+    updateDateDisplay();
+    render();
+    startSimulationLoop();
+  });
+
+  function updateDateDisplay() {
+    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+    document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', options);
   }
-};
 
-// ── STATE ──────────────────────────────────────────────────────────────────
-let currentLeague = 'laliga';
-let currentFilter = 'all';
-let currentView = 'matches'; // 'matches' | 'standings'
-let searchQuery = '';
-let activeModalMatchId = null;
-let isSimulating = true;
-let simInterval = null;
-
-// ── INIT & EVENT LISTENERS ─────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('currentDate').textContent =
-    new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-  
-  startSimulation();
-  render();
-});
-
-// ── SIMULATION LOGIC ───────────────────────────────────────────────────────
-function toggleSimulation() {
-  isSimulating = !isSimulating;
-  const btn = document.getElementById('simToggleBtn');
-  const txt = document.getElementById('simBtnText');
-  if (isSimulating) {
-    btn.classList.add('active');
-    txt.textContent = 'SIMULATING LIVE';
-    startSimulation();
-  } else {
-    btn.classList.remove('active');
-    txt.textContent = 'SIM PAUSED';
-    clearInterval(simInterval);
+  // ── NAVIGATION & TAB ACTIONS ──────────────────
+  function switchLeague(leagueKey) {
+    currentLeague = leagueKey;
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.classList.toggle("active", tab.getAttribute("data-league") === leagueKey);
+    });
+    render();
   }
-}
 
-function startSimulation() {
-  clearInterval(simInterval);
-  simInterval = setInterval(() => {
-    // Tick live matches
-    Object.keys(DATABASE).forEach(lKey => {
-      DATABASE[lKey].matches.forEach(m => {
-        if (m.status === 'live') {
-          m.minute += 1;
-          // Random chance of goal
-          if (Math.random() < 0.08) {
-            if (Math.random() > 0.5) m.scoreH += 1;
-            else m.scoreA += 1;
-          }
-          if (m.minute >= 90) {
-            m.status = 'finished';
-          }
+  function switchView(view) {
+    currentView = view;
+    document.getElementById("viewBtnMatches").classList.toggle("active", view === 'matches');
+    document.getElementById("viewBtnStandings").classList.toggle("active", view === 'standings');
+    document.getElementById("filterBar").style.display = (view === 'matches') ? "flex" : "none";
+    render();
+  }
+
+  function applyFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-filter") === filter);
+    });
+    render();
+  }
+
+  function handleSearch(query) {
+    searchQuery = query.toLowerCase().trim();
+    render();
+  }
+
+  function toggleSimulation() {
+    isSimulating = !isSimulating;
+    const btn = document.getElementById("simToggleBtn");
+    const txt = document.getElementById("simBtnText");
+    btn.classList.toggle("active", isSimulating);
+    txt.innerText = isSimulating ? "SIMULATING LIVE" : "SIMULATION PAUSED";
+  }
+
+  function startSimulationLoop() {
+    if (simulationTimer) clearInterval(simulationTimer);
+    simulationTimer = setInterval(() => {
+      if (!isSimulating) return;
+      const league = leaguesData[currentLeague];
+      if (!league || !league.matches) return;
+      let updated = false;
+      league.matches.forEach(m => {
+        if (m.status === 'live' && Math.random() < 0.25) {
+          if (Math.random() > 0.5) m.homeScore++;
+          else m.awayScore++;
+          updated = true;
         }
       });
+      if (updated && currentView === 'matches') {
+        render();
+      }
+    }, 4000);
+  }
+
+  // ── CORE RENDER ENGINE ────────────────────────
+  function render() {
+    const league = leaguesData[currentLeague];
+    if (!league) return;
+
+    const matches = league.matches;
+    const liveCount = matches.filter(m => m.status === 'live').length;
+    const upcomingCount = matches.filter(m => m.status === 'upcoming').length;
+    const finishedCount = matches.filter(m => m.status === 'finished').length;
+
+    document.getElementById("countAll").innerText = matches.length;
+    document.getElementById("countLive").innerText = liveCount;
+    document.getElementById("countUpcoming").innerText = upcomingCount;
+    document.getElementById("countFinished").innerText = finishedCount;
+
+    const mainEl = document.getElementById("main-content");
+    
+    let html = `
+      <div class="league-banner">
+        <div class="banner-icon">${league.icon}</div>
+        <div>
+          <div class="banner-name">${league.name}</div>
+          <div class="banner-sub">${league.sub}</div>
+        </div>
+        <div class="banner-stats">
+          <div class="stat"><div class="stat-num">${league.stats.matches}</div><div class="stat-lbl">SEASON</div></div>
+          <div class="stat"><div class="stat-num">${league.stats.goals}</div><div class="stat-lbl">GOALS</div></div>
+          <div class="stat"><div class="stat-num">${league.stats.avg}</div><div class="stat-lbl">AVG/MATCH</div></div>
+        </div>
+      </div>
+    `;
+
+    if (currentView === 'matches') {
+      html += renderMatchesHTML(league);
+    } else {
+      html += renderStandingsHTML(league);
+    }
+
+    mainEl.innerHTML = html;
+  }
+
+  function renderMatchesHTML(league) {
+    let filtered = league.matches.filter(m => {
+      if (currentFilter !== 'all' && m.status !== currentFilter) return false;
+      if (searchQuery) {
+        const text = `${m.home} ${m.away} ${m.venue}`.toLowerCase();
+        return text.includes(searchQuery);
+      }
+      return true;
     });
 
-    render();
-    if (activeModalMatchId) {
-      updateModalContent();
+    if (filtered.length === 0) {
+      return `<div style="text-align:center; padding:40px; color:var(--sub);">No matches found matching your filters.</div>`;
     }
-  }, 4000);
-}
 
-// ── VIEW & LEAGUE SWITCHING ────────────────────────────────────────────────
-function switchView(view) {
-  currentView = view;
-  document.getElementById('viewBtnMatches').classList.toggle('active', view === 'matches');
-  document.getElementById('viewBtnStandings').classList.toggle('active', view === 'standings');
-  document.getElementById('filterBar').style.display = (view === 'matches') ? 'flex' : 'none';
-  render();
-}
+    let groups = {};
+    filtered.forEach(m => {
+      if (!groups[m.day]) groups[m.day] = [];
+      groups[m.day].push(m);
+    });
 
-function switchLeague(leagueKey) {
-  currentLeague = leagueKey;
-  document.querySelectorAll('#leagueTabs .tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.league === leagueKey);
-  });
-  render();
-}
-
-function applyFilter(filter) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.filter === filter);
-  });
-  render();
-}
-
-function handleSearch(val) {
-  searchQuery = val.trim().toLowerCase();
-  render();
-}
-
-// ── MAIN RENDER ────────────────────────────────────────────────────────────
-function render() {
-  const league = DATABASE[currentLeague];
-  const main = document.getElementById('main-content');
-  
-  // Calculate counts for filters
-  const allM = league.matches;
-  const liveCount = allM.filter(m => m.status === 'live').length;
-  const upcomingCount = allM.filter(m => m.status === 'upcoming').length;
-  const finishedCount = allM.filter(m => m.status === 'finished').length;
-
-  document.getElementById('countAll').textContent = allM.length;
-  document.getElementById('countLive').textContent = liveCount;
-  document.getElementById('countUpcoming').textContent = upcomingCount;
-  document.getElementById('countFinished').textContent = finishedCount;
-
-  if (currentView === 'standings') {
-    main.innerHTML = buildBanner(league, liveCount, upcomingCount, finishedCount) + buildStandingsTable(league);
-    return;
-  }
-
-  // Filter & Search Matches
-  let matches = allM.filter(m => currentFilter === 'all' || m.status === currentFilter);
-  if (searchQuery) {
-    matches = matches.filter(m => 
-      m.home.toLowerCase().includes(searchQuery) || 
-      m.away.toLowerCase().includes(searchQuery) ||
-      m.venue.toLowerCase().includes(searchQuery)
-    );
-  }
-
-  // Group by status then date
-  const groups = {};
-  matches.forEach(m => {
-    const key = m.status === 'live' ? '__LIVE__' : m.date;
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(m);
-  });
-
-  let html = buildBanner(league, liveCount, upcomingCount, finishedCount);
-
-  const order = ['__LIVE__', ...Object.keys(groups).filter(k => k !== '__LIVE__').sort((a,b) => new Date(a) - new Date(b))];
-
-  order.forEach(key => {
-    if (!groups[key] || !groups[key].length) return;
-    const label = key === '__LIVE__' ? '🔴 LIVE NOW' : formatDateLabel(key);
-    html += `
-      <div class="day-divider">
-        <span>${label}</span>
-        <div class="day-line"></div>
-      </div>
-      <div class="matches-grid">
-        ${groups[key].map(buildMatchCard).join('')}
-      </div>`;
-  });
-
-  if (!matches.length) {
-    html += `<div style="text-align:center;color:var(--sub);padding:60px 0;font-size:14px;">No matches found matching your current filter or search.</div>`;
-  }
-
-  main.innerHTML = html;
-}
-
-// ── UI COMPONENTS ──────────────────────────────────────────────────────────
-function buildBanner(league, live, upcoming, finished) {
-  return `
-    <div class="league-banner" style="border-color:${league.color}33;">
-      <div class="banner-icon">${league.emoji}</div>
-      <div class="banner-info">
-        <div class="banner-name" style="color:${league.color}">${league.name}</div>
-        <div class="banner-sub">${league.country} · Season ${league.season}</div>
-      </div>
-      <div class="banner-stats">
-        <div class="stat"><div class="stat-num" style="color:var(--live)">${live}</div><div class="stat-lbl">LIVE</div></div>
-        <div class="stat"><div class="stat-num" style="color:var(--upcoming)">${upcoming}</div><div class="stat-lbl">UPCOMING</div></div>
-        <div class="stat"><div class="stat-num" style="color:var(--fin)">${finished}</div><div class="stat-lbl">FINISHED</div></div>
-      </div>
-    </div>`;
-}
-
-function buildMatchCard(m) {
-  const isFinished = m.status === 'finished';
-  const isLive = m.status === 'live';
-  const isUpcoming = m.status === 'upcoming';
-
-  const statusPill = isLive
-    ? `<div class="status-pill live"><span>●</span> ${m.minute}'</div>`
-    : isUpcoming
-    ? `<div class="status-pill upcoming">⏰ ${m.time}</div>`
-    : `<div class="status-pill finished">✓ FT</div>`;
-
-  const scoreOrTime = isUpcoming
-    ? `<div class="match-time-text">${m.time}</div>`
-    : `<div class="score-box">
-         <span class="score-num" style="color:${isLive?'var(--live)':'var(--text)'}">${m.scoreH}</span>
-         <span class="score-sep">—</span>
-         <span class="score-num" style="color:${isLive?'var(--live)':'var(--text)'}">${m.scoreA}</span>
-       </div>`;
-
-  return `
-    <div class="match-card ${m.status}" onclick="openMatchModal(${m.id})">
-      <div class="team home">
-        <div class="team-badge">${m.homeEmoji}</div>
-        <div class="team-info">
-          <div class="team-name">${m.home}</div>
-          <div class="team-record">${m.round}</div>
+    let html = `<div class="matches-grid">`;
+    for (const [day, dayMatches] of Object.entries(groups)) {
+      html += `
+        <div class="day-divider">
+          <span>${day}</span>
+          <div class="day-line"></div>
         </div>
-      </div>
+      `;
+      dayMatches.forEach(m => {
+        let centerContent = '';
+        if (m.status === 'live') {
+          centerContent = `
+            <div class="score-box">
+              <span class="score-num">${m.homeScore}</span>
+              <span class="score-sep">-</span>
+              <span class="score-num">${m.awayScore}</span>
+            </div>
+            <div class="status-pill live"><div class="pulse-dot" style="width:6px; height:6px; background:var(--live);"></div> LIVE ${m.time}</div>
+          `;
+        } else if (m.status === 'upcoming') {
+          centerContent = `
+            <div class="match-time-text">${m.time}</div>
+            <div class="status-pill upcoming">UPCOMING</div>
+          `;
+        } else {
+          centerContent = `
+            <div class="score-box">
+              <span class="score-num" style="color:var(--fin);">${m.homeScore}</span>
+              <span class="score-sep">-</span>
+              <span class="score-num" style="color:var(--fin);">${m.awayScore}</span>
+            </div>
+            <div class="status-pill finished">FT</div>
+          `;
+        }
 
-      <div class="match-center">
-        ${scoreOrTime}
-        ${statusPill}
-        <div class="match-meta">${m.date}</div>
-      </div>
-
-      <div class="team away">
-        <div class="team-badge">${m.awayEmoji}</div>
-        <div class="team-info">
-          <div class="team-name">${m.away}</div>
-          <div class="team-record">${m.venue.split(',')[0]}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function buildStandingsTable(league) {
-  if (!league.standings || !league.standings.length) {
-    return `<div style="text-align:center; color:var(--sub); padding:40px;">No standings available.</div>`;
-  }
-
-  const rows = league.standings.map(s => {
-    let rankClass = '';
-    if (s.rank === 1) rankClass = 'rank-1';
-    else if (s.rank <= 4) rankClass = 'rank-ucl';
-    else if (s.rank <= 6) rankClass = 'rank-uel';
-
-    const gd = s.gf - s.ga;
-    const formDots = (s.form || []).map(f => `<div class="form-dot ${f}">${f}</div>`).join('');
-
-    return `
-      <tr class="${rankClass}">
-        <td class="rank-cell ${s.rank === 1 ? 'rank-1' : ''}">${s.rank}</td>
-        <td>
-          <div class="team-cell">
-            <span class="tbl-emoji">${s.emoji}</span>
-            <span>${s.team}</span>
+        html += `
+          <div class="match-card ${m.status}" onclick="openMatchModal('${m.id}')">
+            <div class="team">
+              <div class="team-badge">${m.homeEmoji}</div>
+              <div class="team-info">
+                <div class="team-name">${m.home}</div>
+                <div class="team-record">${m.homeRec}</div>
+              </div>
+            </div>
+            <div class="match-center">
+              ${centerContent}
+              <div class="match-meta">${m.venue}</div>
+            </div>
+            <div class="team away">
+              <div class="team-badge">${m.awayEmoji}</div>
+              <div class="team-info">
+                <div class="team-name">${m.away}</div>
+                <div class="team-record">${m.awayRec}</div>
+              </div>
+            </div>
           </div>
-        </td>
-        <td>${s.mp}</td>
-        <td>${s.w}</td>
-        <td>${s.d}</td>
-        <td>${s.l}</td>
-        <td>${s.gf}:${s.ga}</td>
-        <td style="font-weight:700">${gd > 0 ? '+'+gd : gd}</td>
-        <td style="font-weight:800; color:var(--text);">${s.pts}</td>
-        <td><div class="form-dots">${formDots}</div></td>
-      </tr>`;
-  }).join('');
-
-  return `
-    <div class="standings-card">
-      <div class="table-responsive">
-        <table class="standings-table">
-          <thead>
-            <tr>
-              <th style="text-align:center;">#</th>
-              <th>Team</th>
-              <th>MP</th>
-              <th>W</th>
-              <th>D</th>
-              <th>L</th>
-              <th>Goals</th>
-              <th>GD</th>
-              <th>Pts</th>
-              <th>Form</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-}
-
-// ── MATCH DETAIL MODAL ─────────────────────────────────────────────────────
-function openMatchModal(matchId) {
-  activeModalMatchId = matchId;
-  const modal = document.getElementById('matchModal');
-  modal.classList.add('open');
-  updateModalContent();
-}
-
-function closeMatchModal() {
-  const modal = document.getElementById('matchModal');
-  modal.classList.remove('open');
-  activeModalMatchId = null;
-}
-
-function closeModalOnBackdrop(e) {
-  if (e.target.id === 'matchModal') {
-    closeMatchModal();
-  }
-}
-
-function findMatchById(id) {
-  for (const lKey in DATABASE) {
-    const match = DATABASE[lKey].matches.find(m => m.id === id);
-    if (match) return { match, league: DATABASE[lKey] };
-  }
-  return null;
-}
-
-function switchModalTab(paneId) {
-  document.querySelectorAll('.modal-tab').forEach(t => t.classList.toggle('active', t.dataset.pane === paneId));
-  document.querySelectorAll('.modal-pane').forEach(p => p.classList.toggle('active', p.id === `pane-${paneId}`));
-}
-
-function updateModalContent() {
-  if (!activeModalMatchId) return;
-  const data = findMatchById(activeModalMatchId);
-  if (!data) return;
-
-  const { match: m, league } = data;
-
-  // Header Data
-  document.getElementById('modalMeta').textContent = `${league.name} · ${m.round} · ${m.venue}`;
-  document.getElementById('modalHomeEmoji').textContent = m.homeEmoji;
-  document.getElementById('modalHomeName').textContent = m.home;
-  document.getElementById('modalAwayEmoji').textContent = m.awayEmoji;
-  document.getElementById('modalAwayName').textContent = m.away;
-
-  const isLive = m.status === 'live';
-  const isUpcoming = m.status === 'upcoming';
-
-  if (isUpcoming) {
-    document.getElementById('modalScoreBox').innerHTML = `<div class="match-time-text">${m.time}</div>`;
-    document.getElementById('modalStatusPill').className = 'status-pill upcoming';
-    document.getElementById('modalStatusPill').textContent = m.date;
-  } else {
-    document.getElementById('modalScoreBox').innerHTML = `
-      <span class="score-num" style="color:${isLive?'var(--live)':'var(--text)'}">${m.scoreH}</span>
-      <span class="score-sep">-</span>
-      <span class="score-num" style="color:${isLive?'var(--live)':'var(--text)'}">${m.scoreA}</span>`;
-    
-    document.getElementById('modalStatusPill').className = `status-pill ${m.status}`;
-    document.getElementById('modalStatusPill').textContent = isLive ? `● ${m.minute}'` : '✓ FT';
+        `;
+      });
+    }
+    html += `</div>`;
+    return html;
   }
 
-  // Populate Panes
-  renderTimeline(m);
-  renderStats(m);
-  renderPitch(m);
-  renderCommentary(m);
-}
+  function renderStandingsHTML(league) {
+    let rows = "";
+    league.standings.forEach((s, idx) => {
+      let rankClass = "";
+      if (s.rank === 1) rankClass = "rank-1";
+      else if (s.rank <= 4) rankClass = "rank-ucl";
+      else if (s.rank === 5) rankClass = "rank-uel";
+      else if (s.rank >= league.standings.length - 2) rankClass = "rank-rel";
 
-function renderTimeline(m) {
-  const container = document.getElementById('modalTimeline');
-  if (m.status === 'upcoming') {
-    container.innerHTML = `<div style="text-align:center; color:var(--sub); padding:30px;">Match has not started yet.</div>`;
-    return;
-  }
+      let formDots = s.form.map(f => `<div class="form-dot ${f}">${f}</div>`).join("");
 
-  const events = [
-    { min: "12'", type: 'goal', team: 'home', player: 'Vinicius Jr.', desc: 'Goal (Assisted by Bellingham)' },
-    { min: "34'", type: 'card', team: 'away', player: 'Gavi', desc: 'Yellow Card (Tactical Foul)' },
-    { min: "55'", type: 'goal', team: 'away', player: 'Lamine Yamal', desc: 'Goal (Left footed shot)' }
-  ];
+      rows += `
+        <tr class="${rankClass}">
+          <td class="rank-cell">${s.rank}</td>
+          <td>
+            <div class="team-cell">
+              <span class="tbl-emoji">${s.emoji}</span>
+              <span>${s.name}</span>
+            </div>
+          </td>
+          <td>${s.p}</td>
+          <td>${s.w}</td>
+          <td>${s.d}</td>
+          <td>${s.l}</td>
+          <td>${s.gf}</td>
+          <td>${s.ga}</td>
+          <td>${s.gf - s.ga > 0 ? '+' + (s.gf - s.ga) : s.gf - s.ga}</td>
+          <td><strong>${s.pts}</strong></td>
+          <td><div class="form-dots">${formDots}</div></td>
+        </tr>
+      `;
+    });
 
-  if (m.scoreH >= 2) {
-    events.push({ min: `${Math.min(m.minute || 75, 74)}'`, type: 'goal', team: 'home', player: 'Mbappé', desc: 'Goal (Penalty)' });
-  }
-
-  container.innerHTML = events.map(e => `
-    <div class="timeline-item ${e.team}-event">
-      <div class="timeline-content">
-        <div style="font-weight:700; color:var(--text);">${e.player}</div>
-        <div style="font-size:11px; color:var(--sub);">${e.desc}</div>
-      </div>
-      <div class="timeline-minute">${e.min}</div>
-    </div>
-  `).join('');
-}
-
-function renderStats(m) {
-  const container = document.getElementById('modalStats');
-  if (m.status === 'upcoming') {
-    container.innerHTML = `<div style="text-align:center; color:var(--sub); padding:30px;">Stats will be available live.</div>`;
-    return;
-  }
-
-  const stats = [
-    { title: 'Ball Possession', h: '58%', a: '42%', hVal: 58, aVal: 42 },
-    { title: 'Total Shots', h: '14', a: '9', hVal: 14, aVal: 9 },
-    { title: 'Shots on Target', h: '6', a: '3', hVal: 6, aVal: 3 },
-    { title: 'Pass Accuracy', h: '88%', a: '82%', hVal: 88, aVal: 82 },
-    { title: 'Corner Kicks', h: '7', a: '4', hVal: 7, aVal: 4 },
-    { title: 'Fouls Committed', h: '10', a: '14', hVal: 10, aVal: 14 }
-  ];
-
-  container.innerHTML = stats.map(s => {
-    const total = s.hVal + s.aVal || 1;
-    const hPct = (s.hVal / total) * 100;
-    const aPct = (s.aVal / total) * 100;
     return `
-      <div class="stat-row">
-        <div class="stat-header">
-          <span>${s.h}</span>
-          <span class="stat-title">${s.title}</span>
-          <span>${s.a}</span>
+      <div class="standings-card">
+        <div class="table-responsive">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Club</th>
+                <th>P</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>GF</th>
+                <th>GA</th>
+                <th>GD</th>
+                <th>Pts</th>
+                <th>Last 5 Form</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
         </div>
-        <div class="stat-bars">
-          <div class="stat-bar-home" style="width:${hPct}%"></div>
-          <div class="stat-bar-away" style="width:${aPct}%"></div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function renderPitch(m) {
-  const container = document.getElementById('modalPitch');
-  container.innerHTML = `
-    <div class="pitch-line-center"></div>
-    <div class="pitch-circle"></div>
-
-    <!-- Away Team Half -->
-    <div class="pitch-half">
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt away-p">GK</div><div class="player-name">Ter Stegen</div></div>
       </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt away-p">DF</div><div class="player-name">Koundé</div></div>
-        <div class="player-node"><div class="player-shirt away-p">DF</div><div class="player-name">Araújo</div></div>
-        <div class="player-node"><div class="player-shirt away-p">DF</div><div class="player-name">Cubarsí</div></div>
-        <div class="player-node"><div class="player-shirt away-p">DF</div><div class="player-name">Balde</div></div>
-      </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt away-p">MF</div><div class="player-name">Pedri</div></div>
-        <div class="player-node"><div class="player-shirt away-p">MF</div><div class="player-name">De Jong</div></div>
-      </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt away-p">FW</div><div class="player-name">Yamal</div></div>
-        <div class="player-node"><div class="player-shirt away-p">FW</div><div class="player-name">Lewandowski</div></div>
-        <div class="player-node"><div class="player-shirt away-p">FW</div><div class="player-name">Raphinha</div></div>
-      </div>
-    </div>
-
-    <!-- Home Team Half -->
-    <div class="pitch-half">
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt home-p">FW</div><div class="player-name">Vinicius</div></div>
-        <div class="player-node"><div class="player-shirt home-p">FW</div><div class="player-name">Mbappé</div></div>
-        <div class="player-node"><div class="player-shirt home-p">FW</div><div class="player-name">Rodrygo</div></div>
-      </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt home-p">MF</div><div class="player-name">Bellingham</div></div>
-        <div class="player-node"><div class="player-shirt home-p">MF</div><div class="player-name">Camavinga</div></div>
-        <div class="player-node"><div class="player-shirt home-p">MF</div><div class="player-name">Valverde</div></div>
-      </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt home-p">DF</div><div class="player-name">Carvajal</div></div>
-        <div class="player-node"><div class="player-shirt home-p">DF</div><div class="player-name">Militao</div></div>
-        <div class="player-node"><div class="player-shirt home-p">DF</div><div class="player-name">Rüdiger</div></div>
-        <div class="player-node"><div class="player-shirt home-p">DF</div><div class="player-name">Mendy</div></div>
-      </div>
-      <div class="pitch-row">
-        <div class="player-node"><div class="player-shirt home-p">GK</div><div class="player-name">Courtois</div></div>
-      </div>
-    </div>`;
-}
-
-function renderCommentary(m) {
-  const container = document.getElementById('modalCommentary');
-  if (m.status === 'upcoming') {
-    container.innerHTML = `<div style="text-align:center; color:var(--sub); padding:30px;">Commentary starts at kickoff.</div>`;
-    return;
+    `;
   }
 
-  const logs = [
-    { min: `${m.minute || 75}'`, text: "Great possession play in mid-field by the home team.", type: "text" },
-    { min: "74'", text: "GOAL! Kylian Mbappé converts the penalty calmly into the bottom right corner!", type: "goal" },
-    { min: "68'", text: "Substitution for FC Barcelona: Ferran Torres replaces Raphinha.", type: "text" },
-    { min: "55'", text: "GOAL! Lamine Yamal cuts inside and curls a beauty into the top corner!", type: "goal" },
-    { min: "34'", text: "Yellow Card shown to Gavi after a late challenge.", type: "card" },
-    { min: "12'", text: "GOAL! Vinicius Jr. breaks through the defense and finishes cleanly!", type: "goal" },
-    { min: "1'", text: "Kick-off! The match is underway.", type: "text" }
-  ];
+  // ── MATCH DETAIL MODAL ────────────────────────
+  function openMatchModal(matchId) {
+    const league = leaguesData[currentLeague];
+    const match = league.matches.find(m => m.id === matchId);
+    if (!match) return;
 
-  container.innerHTML = logs.map(l => `
-    <div class="commentary-item ${l.type}">
-      <div class="commentary-min">${l.min}</div>
-      <div class="commentary-text">${l.text}</div>
-    </div>
-  `).join('');
-}
+    activeMatchModal = match;
 
-function formatDateLabel(dateStr) {
-  const d = new Date(dateStr);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const target = new Date(d); target.setHours(0,0,0,0);
-  const diff = Math.round((target - today) / 86400000);
-  const weekday = d.toLocaleDateString('en-GB', { weekday:'long' });
-  const formatted = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
-  if (diff === 0) return `TODAY · ${formatted}`;
-  if (diff === 1) return `TOMORROW · ${formatted}`;
-  if (diff === -1) return `YESTERDAY · ${formatted}`;
-  return `${weekday.toUpperCase()} · ${formatted}`;
-}
+    document.getElementById("modalMatchMeta").innerText = `${league.name} • ${match.venue} • Ref: ${match.referee}`;
+    document.getElementById("modalHomeBadge").innerText = match.homeEmoji;
+    document.getElementById("modalHomeName").innerText = match.home;
+    document.getElementById("modalAwayBadge").innerText = match.away;
+    document.getElementById("modalAwayName").innerText = match.away;
+    document.getElementById("modalHomeScore").innerText = match.homeScore;
+    document.getElementById("modalAwayScore").innerText = match.awayScore;
+
+    const pill = document.getElementById("modalStatusPill");
+    pill.className = `status-pill ${match.status}`;
+    pill.innerText = match.status === 'live' ? `LIVE ${match.time}` : (match.status.toUpperCase());
+
+    const timelineList = document.getElementById("modalTimelineList");
+    if (match.timeline.length === 0) {
+      timelineList.innerHTML = `<div style="text-align:center; color:var(--sub); padding:20px;">No major events recorded yet.</div>`;
+    } else {
+      timelineList.innerHTML = match.timeline.map(ev => {
+        const isHome = ev.team === 'home';
+        const icon = ev.type === 'goal' ? '⚽' : (ev.type === 'card' ? '🟨' : '📌');
+        return `
+          <div class="timeline-item ${isHome ? 'home-event' : 'away-event'}">
+            <div class="timeline-content">
+              <strong>${ev.player}</strong> <span style="font-size:16px;">${icon}</span>
+              <div style="font-size:11px; color:var(--sub);">${ev.type.toUpperCase()}</div>
+            </div>
+            <div class="timeline-minute">${ev.min}'</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    const statsList = document.getElementById("modalStatsList");
+    const stats = match.stats;
+    statsList.innerHTML = `
+      <div class="stat-row">
+        <div class="stat-header"><span>${stats.possession[0]}%</span><span class="stat-title">Possession</span><span>${stats.possession[1]}%</span></div>
+        <div class="stat-bars"><div class="stat-bar-home" style="width:${stats.possession[0]}%"></div><div class="stat-bar-away" style="width:${stats.possession[1]}%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-header"><span>${stats.shots[0]}</span><span class="stat-title">Total Shots</span><span>${stats.shots[1]}</span></div>
+        <div class="stat-bars"><div class="stat-bar-home" style="width:${(stats.shots[0]/(stats.shots[0]+stats.shots[1]||1))*100}%"></div><div class="stat-bar-away" style="width:${(stats.shots[1]/(stats.shots[0]+stats.shots[1]||1))*100}%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-header"><span>${stats.onTarget[0]}</span><span class="stat-title">Shots on Target</span><span>${stats.onTarget[1]}</span></div>
+        <div class="stat-bars"><div class="stat-bar-home" style="width:${(stats.onTarget[0]/(stats.onTarget[0]+stats.onTarget[1]||1))*100}%"></div><div class="stat-bar-away" style="width:${(stats.onTarget[1]/(stats.onTarget[0]+stats.onTarget[1]||1))*100}%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-header"><span>${stats.fouls[0]}</span><span class="stat-title">Fouls</span><span>${stats.fouls[1]}</span></div>
+        <div class="stat-bars"><div class="stat-bar-home" style="width:${(stats.fouls[0]/(stats.fouls[0]+stats.fouls[1]||1))*100}%"></div><div class="stat-bar-away" style="width:${(stats.fouls[1]/(stats.fouls[0]+stats.fouls[1]||1))*100}%"></div></div>
+      </div>
+    `;
+
+    const commFeed = document.getElementById("modalCommentaryFeed");
+    commFeed.innerHTML = match.commentary.map(c => `
+      <div class="commentary-item ${c.type}">
+        <div class="commentary-min">${c.min}'</div>
+        <div class="commentary-text">${c.text}</div>
+      </div>
+    `).join("");
+
+    document.getElementById("homeLineupHalf").innerHTML = `
+      <div class="pitch-row"><div class="player-node"><div class="player-shirt home-p">1</div><span class="player-name">GK</span></div></div>
+      <div class="pitch-row">
+        <div class="player-node"><div class="player-shirt home-p">2</div><span class="player-name">RB</span></div>
+        <div class="player-node"><div class="player-shirt home-p">4</div><span class="player-name">CB</span></div>
+        <div class="player-node"><div class="player-shirt home-p">5</div><span class="player-name">CB</span></div>
+        <div class="player-node"><div class="player-shirt home-p">3</div><span class="player-name">LB</span></div>
+      </div>
+      <div class="pitch-row">
+        <div class="player-node"><div class="player-shirt home-p">6</div><span class="player-name">CDM</span></div>
+        <div class="player-node"><div class="player-shirt home-p">8</div><span class="player-name">CM</span></div>
+        <div class="player-node"><div class="player-shirt home-p">10</div><span class="player-name">AM</span></div>
+      </div>
+    `;
+
+    document.getElementById("awayLineupHalf").innerHTML = `
+      <div class="pitch-row">
+        <div class="player-node"><div class="player-shirt away-p">7</div><span class="player-name">RW</span></div>
+        <div class="player-node"><div class="player-shirt away-p">9</div><span class="player-name">ST</span></div>
+        <div class="player-node"><div class="player-shirt away-p">11</div><span class="player-name">LW</span></div>
+      </div>
+      <div class="pitch-row">
+        <div class="player-node"><div class="player-shirt away-p">8</div><span class="player-name">CM</span></div>
+        <div class="player-node"><div class="player-shirt away-p">6</div><span class="player-name">CDM</span></div>
+      </div>
+      <div class="pitch-row"><div class="player-node"><div class="player-shirt away-p">1</div><span class="player-name">GK</span></div></div>
+    `;
+
+    document.getElementById("matchModal").classList.add("open");
+  }
+
+  function closeModal() {
+    document.getElementById("matchModal").classList.remove("open");
+  }
+
+  function closeModalOnBackdrop(e) {
+    if (e.target.id === "matchModal") closeModal();
+  }
+
+  function switchModalTab(tabName) {
+    const tabs = document.querySelectorAll(".modal-tab");
+    tabs.forEach(t => t.classList.remove("active"));
+    event.currentTarget.classList.add("active");
+
+    document.querySelectorAll(".modal-pane").forEach(p => p.classList.remove("active"));
+    document.getElementById(`pane-${tabName}`).classList.add("active");
+  }
 </script>
 </body>
 </html>
