@@ -9,14 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-      --bg:         #0b0e14;
-      --surface:    #13171f;
-      --card:       #1a1f2b;
-      --card-hover: #222938;
-      --border:     #242a38;
-      --muted:      #3a4256;
-      --text:       #e8eaf0;
-      --sub:        #7a849e;
+      /* Deep Navy Blue Theme */
+      --bg:         #030712;
+      --surface:    #0f172a;
+      --card:       #1e293b;
+      --card-hover: #334155;
+      --border:     #1e293b;
+      --muted:      #475569;
+      --text:       #f8fafc;
+      --sub:        #94a3b8;
       --accent-la:  #ff4f00;   /* LaLiga */
       --accent-ep:  #e90052;   /* EPL */
       --accent-uc:  #3b82f6;   /* UCL */
@@ -28,8 +29,6 @@
       --upcoming:   #60a5fa;
       --fin:        #94a3b8;
       --radius:     12px;
-      --pitch-bg:   #1a4325;
-      --pitch-line: rgba(255, 255, 255, 0.25);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -78,6 +77,8 @@
     .logo i { color: var(--accent-la); font-size: 24px; }
     .logo span { color: var(--accent-la); }
 
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
     .sim-toggle-btn {
       background: var(--card);
       border: 1px solid var(--border);
@@ -112,6 +113,22 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(0.7); }
     }
+
+    /* Auth Buttons */
+    .auth-btn-group { display: flex; gap: 8px; }
+    .auth-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .auth-btn:hover { border-color: var(--sub); background: var(--card-hover); }
+    .auth-btn.primary { background: var(--accent-la); border-color: var(--accent-la); color: #fff; }
 
     /* ── VIEW SWITCHER ───────────────────────────── */
     .nav-views {
@@ -174,9 +191,9 @@
     }
     .hero-title span { color: var(--accent-la); }
     .hero-subtitle {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--sub);
-      max-width: 600px;
+      max-width: 750px;
       line-height: 1.5;
     }
     .hero-cta-group {
@@ -391,7 +408,12 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
+      font-size: 16px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .team-badge img {
+      width: 28px; height: 28px; object-fit: contain;
     }
     .team-info { line-height: 1.3; }
     .team.away .team-info { text-align: right; }
@@ -402,7 +424,7 @@
     }
     .team-record { font-size: 11px; color: var(--sub); }
 
-    .match-center { text-align: center; min-width: 120px; }
+    .match-center { text-align: center; min-width: 160px; }
     .score-box {
       display: flex; align-items: center; justify-content: center; gap: 8px;
       font-family: 'Barlow Condensed', sans-serif;
@@ -423,7 +445,22 @@
     .status-pill.live { background: rgba(34,197,94,.15); color: var(--live); border: 1px solid rgba(34,197,94,.3); }
     .status-pill.upcoming { background: rgba(96,165,250,.15); color: var(--upcoming); border: 1px solid rgba(96,165,250,.3); }
     .status-pill.finished { background: rgba(148,163,184,.1); color: var(--fin); border: 1px solid rgba(148,163,184,.2); }
-    .match-meta { font-size: 10px; color: var(--sub); margin-top: 4px; }
+    
+    .goal-scorers-mini {
+      font-size: 10px;
+      color: var(--sub);
+      margin-top: 4px;
+      line-height: 1.2;
+      max-width: 180px;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .goal-scorers-mini i { color: var(--live); font-size: 9px; }
+
+    .match-meta { font-size: 11px; color: var(--accent-la); font-weight: 600; margin-top: 4px; }
 
     /* ── STANDINGS ───────────────────────────────── */
     .standings-card {
@@ -445,6 +482,7 @@
     .standings-table tbody tr:hover { background: var(--card-hover); }
     .rank-cell { font-weight: 700; width: 40px; text-align: center; }
     .team-cell { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+    .team-cell img { width: 24px; height: 24px; object-fit: contain; }
     .form-dots { display: flex; gap: 3px; }
     .form-dot {
       width: 16px; height: 16px; border-radius: 3px;
@@ -455,7 +493,7 @@
     .form-dot.D { background: #eab308; }
     .form-dot.L { background: #ef4444; }
 
-    /* ── MODAL ───────────────────────────────────── */
+    /* ── MODALS & TABS ───────────────────────────── */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(4px); z-index: 1000;
@@ -465,8 +503,9 @@
     .modal-backdrop.open { opacity: 1; pointer-events: auto; }
     .modal-container {
       background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      width: 100%; max-width: 750px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+      width: 100%; max-width: 450px; display: flex; flex-direction: column; overflow: hidden;
     }
+    .modal-container.wide { max-width: 800px; max-height: 88vh; }
     .modal-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px; position: relative; }
     .modal-close-btn {
       position: absolute; top: 16px; right: 16px; background: var(--surface);
@@ -474,6 +513,77 @@
       border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
     .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+
+    .match-modal-tabs {
+      display: flex;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+    .match-tab-btn {
+      flex: 1; padding: 12px 0; background: none; border: none; border-bottom: 2px solid transparent;
+      color: var(--sub); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .match-tab-btn.active { color: var(--accent-la); border-bottom-color: var(--accent-la); }
+
+    /* ── DETAILED LINEUP ─────────────────────────── */
+    .lineup-team-selector {
+      display: flex; gap: 8px; margin-bottom: 16px;
+    }
+    .lineup-team-btn {
+      flex: 1; padding: 8px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--sub); font-size: 13px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+    }
+    .lineup-team-btn.active { background: var(--surface); color: var(--text); border-color: var(--accent-la); }
+    .lineup-team-btn img { width: 20px; height: 20px; object-fit: contain; }
+
+    .lineup-section-title {
+      font-size: 12px; font-weight: 700; color: var(--sub); text-transform: uppercase;
+      margin: 16px 0 8px; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 4px;
+    }
+    .players-list-grid {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .player-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s;
+    }
+    .player-card:hover { background: var(--card-hover); }
+    .player-card-left { display: flex; align-items: center; gap: 12px; }
+    .player-avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--accent-la); font-size: 13px;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .player-info { line-height: 1.3; }
+    .player-name-text { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+    .player-pos-tag { font-size: 10px; color: var(--sub); font-weight: 600; text-transform: uppercase; }
+    .player-stats-mini { font-size: 11px; color: var(--sub); margin-top: 2px; }
+    
+    .rating-badge {
+      padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .rating-high { background: #22c55e; color: #000; }
+    .rating-mid  { background: #eab308; color: #000; }
+    .rating-normal { background: var(--muted); color: #fff; }
+
+    /* Auth Form */
+    .auth-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; color: var(--sub); font-weight: 600; }
+    .form-group input {
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; color: var(--text); font-size: 13px; outline: none;
+    }
+    .form-group input:focus { border-color: var(--accent-la); }
+    .form-submit-btn {
+      background: var(--accent-la); color: #fff; border: none; padding: 10px;
+      border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: opacity 0.2s;
+    }
+    .form-submit-btn:hover { opacity: 0.9; }
 
     /* ── FOOTER ──────────────────────────────────── */
     footer {
@@ -502,9 +612,16 @@
       <span id="simBtnText">SIMULATING LIVE</span>
     </button>
   </div>
-  <div class="nav-views">
-    <button class="nav-view-btn active" id="viewBtnMatches" onclick="switchView('matches')"><i class="fa-solid fa-calendar"></i> Matches</button>
-    <button class="nav-view-btn" id="viewBtnStandings" onclick="switchView('standings')"><i class="fa-solid fa-list-ol"></i> Standings</button>
+
+  <div class="header-right">
+    <div class="nav-views">
+      <button class="nav-view-btn active" id="viewBtnMatches" onclick="switchView('matches')"><i class="fa-solid fa-calendar"></i> Matches</button>
+      <button class="nav-view-btn" id="viewBtnStandings" onclick="switchView('standings')"><i class="fa-solid fa-list-ol"></i> Standings</button>
+    </div>
+    <div class="auth-btn-group" id="authButtonGroup">
+      <button class="auth-btn" onclick="openAuthModal('login')">Login</button>
+      <button class="auth-btn primary" onclick="openAuthModal('register')">Register</button>
+    </div>
   </div>
 </header>
 
@@ -515,7 +632,7 @@
   </div>
   <h1 class="hero-title">Experience Football Like Never <span>Before</span></h1>
   <p class="hero-subtitle">
-    Live score updates, tactical lineups, real-time match events, and detailed 20-team league standings built with precision design.
+    Live score updates, tactical lineups, real-time match events, and detailed of every team in every league standings.
   </p>
   <div class="hero-cta-group">
     <button class="btn-primary" onclick="document.getElementById('main-content').scrollIntoView({behavior: 'smooth'})">Explore Live Matches</button>
@@ -553,89 +670,213 @@
   FootHub Interactive Football Center &copy; 2026. All 20 teams simulated real-time data.
 </footer>
 
-<!-- MODAL -->
+<!-- MATCH DETAIL MODAL WITH TABS -->
 <div class="modal-backdrop" id="matchModal" onclick="closeModalOnBackdrop(event)">
-  <div class="modal-container">
+  <div class="modal-container wide">
     <div class="modal-header">
       <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
       <div id="modalContentHeader" style="text-align:center; font-weight:700; font-size:16px;">Match Details</div>
     </div>
-    <div class="modal-body" id="modalBodyContent">
-      <!-- Detailed info -->
+    <div class="match-modal-tabs">
+      <button class="match-tab-btn active" onclick="switchMatchTab('overview')">Overview</button>
+      <button class="match-tab-btn" onclick="switchMatchTab('timeline')">Timeline</button>
+      <button class="match-tab-btn" onclick="switchMatchTab('lineup')">Lineup & Performance</button>
+      <button class="match-tab-btn" onclick="switchMatchTab('stats')">Stats</button>
     </div>
+    <div class="modal-body" id="modalBodyContent" style="min-height: 420px;"></div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-backdrop" id="authModal" onclick="closeAuthModalOnBackdrop(event)">
+  <div class="modal-container">
+    <div class="modal-header">
+      <button class="modal-close-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div id="authModalTitle" style="text-align:center; font-weight:700; font-size:18px;">Login to FootHub</div>
+    </div>
+    <div class="modal-body" id="authModalBody"></div>
   </div>
 </div>
 
 <script>
+  function getTeamLogo(teamName) {
+    const map = {
+      "Real Madrid": "8633", "FC Barcelona": "8315", "Atlético Madrid": "9906", "Girona FC": "12579", "Athletic Club": "8318",
+      "Real Betis": "543", "Real Sociedad": "548", "Villarreal": "533", "Valencia": "532", "Sevilla FC": "536",
+      "Celta Vigo": "538", "Osasuna": "727", "Getafe": "546", "Mallorca": "798", "Rayo Vallecano": "728",
+      "Las Palmas": "539", "Alavés": "542", "Granada": "715", "Almería": "401", "Cádiz": "726",
+      "Arsenal": "42", "Manchester City": "50", "Liverpool": "40", "Aston Villa": "66", "Tottenham": "47",
+      "Chelsea": "49", "Newcastle": "34", "Manchester United": "33", "West Ham": "48", "Crystal Palace": "52",
+      "Brighton": "51", "Bournemouth": "35", "Fulham": "36", "Wolverhampton": "39", "Everton": "45",
+      "Brentford": "55", "Nottingham Forest": "65", "Luton Town": "1359", "Burnley": "44", "Sheffield United": "62",
+      "Bayern Munich": "157", "Borussia Dortmund": "165", "RB Leipzig": "721", "Bayer Leverkusen": "168",
+      "Inter Milan": "505", "AC Milan": "489", "Juventus": "496", "Napoli": "492", "AS Roma": "497",
+      "Paris Saint-Germain": "85", "Monaco": "91", "Marseille": "81", "Lyon": "80",
+      "Argentina": "779", "France": "773", "Brazil": "794", "England": "765", "Spain": "772", "Germany": "763",
+      "Portugal": "770", "Netherlands": "797", "Belgium": "758", "Italy": "768", "Croatia": "761", "Uruguay": "787",
+      "Colombia": "789", "Mexico": "780", "USA": "784", "Japan": "792", "Morocco": "1538", "Senegal": "1539",
+      "South Korea": "793", "Australia": "781"
+    };
+    let id = map[teamName] || "8315";
+    return `https://media.api-sports.io/football/teams/${id}.png`;
+  }
+
   const teamPools = {
     laliga: [
-      { name: "Real Madrid", emoji: "👑" }, { name: "FC Barcelona", emoji: "🔴" }, { name: "Atlético Madrid", emoji: "⚪" },
-      { name: "Girona FC", emoji: "🟠" }, { name: "Athletic Club", emoji: "🦁" }, { name: "Real Betis", emoji: "🟢" },
-      { name: "Real Sociedad", emoji: "🔵" }, { name: "Villarreal", emoji: "🟡" }, { name: "Valencia", emoji: "🦇" },
-      { name: "Sevilla FC", emoji: "🔴" }, { name: "Celta Vigo", emoji: "🩵" }, { name: "Osasuna", emoji: "🐂" },
-      { name: "Getafe", emoji: "🔷" }, { name: "Mallorca", emoji: "🏝️" }, { name: "Rayo Vallecano", emoji: "⚡" },
-      { name: "Las Palmas", emoji: "🌴" }, { name: "Alavés", emoji: "🔵" }, { name: "Granada", emoji: "🔴" },
-      { name: "Almería", emoji: "🟥" }, { name: "Cádiz", emoji: "🟡" }
+      { name: "Real Madrid" }, { name: "FC Barcelona" }, { name: "Atlético Madrid" },
+      { name: "Girona FC" }, { name: "Athletic Club" }, { name: "Real Betis" },
+      { name: "Real Sociedad" }, { name: "Villarreal" }, { name: "Valencia" },
+      { name: "Sevilla FC" }, { name: "Celta Vigo" }, { name: "Osasuna" },
+      { name: "Getafe" }, { name: "Mallorca" }, { name: "Rayo Vallecano" },
+      { name: "Las Palmas" }, { name: "Alavés" }, { name: "Granada" },
+      { name: "Almería" }, { name: "Cádiz" }
     ],
     epl: [
-      { name: "Arsenal", emoji: "🔴" }, { name: "Manchester City", emoji: "⚡" }, { name: "Liverpool", emoji: "🔴" },
-      { name: "Aston Villa", emoji: "🦁" }, { name: "Tottenham", emoji: "⚪" }, { name: "Chelsea", emoji: "🔵" },
-      { name: "Newcastle", emoji: "🦅" }, { name: "Manchester United", emoji: "😈" }, { name: "West Ham", emoji: "⚒️" },
-      { name: "Crystal Palace", emoji: "🦅" }, { name: "Brighton", emoji: "🌊" }, { name: "Bournemouth", emoji: "🍒" },
-      { name: "Fulham", emoji: "⚪" }, { name: "Wolverhampton", emoji: "🐺" }, { name: "Everton", emoji: "🔷" },
-      { name: "Brentford", emoji: "🐝" }, { name: "Nottingham Forest", emoji: "🌲" }, { name: "Luton Town", emoji: "🟧" },
-      { name: "Burnley", emoji: "🟣" }, { name: "Sheffield United", emoji: "⚔️" }
+      { name: "Arsenal" }, { name: "Manchester City" }, { name: "Liverpool" },
+      { name: "Aston Villa" }, { name: "Tottenham" }, { name: "Chelsea" },
+      { name: "Newcastle" }, { name: "Manchester United" }, { name: "West Ham" },
+      { name: "Crystal Palace" }, { name: "Brighton" }, { name: "Bournemouth" },
+      { name: "Fulham" }, { name: "Wolverhampton" }, { name: "Everton" },
+      { name: "Brentford" }, { name: "Nottingham Forest" }, { name: "Luton Town" },
+      { name: "Burnley" }, { name: "Sheffield United" }
     ],
     ucl: [
-      { name: "Real Madrid", emoji: "👑" }, { name: "Bayern Munich", emoji: "🔴" }, { name: "Manchester City", emoji: "⚡" },
-      { name: "PSG", emoji: "🔵" }, { name: "Inter Milan", emoji: "⚫" }, { name: "Arsenal", emoji: "🔴" },
-      { name: "Barcelona", emoji: "🔴" }, { name: "Borussia Dortmund", emoji: "🟡" }, { name: "Atletico Madrid", emoji: "⚪" },
-      { name: "Porto", emoji: "🔵" }, { name: "PSV Eindhoven", emoji: "⚪" }, { name: "Napoli", emoji: "💙" },
-      { name: "Lazio", emoji: "🦅" }, { name: "RB Leipzig", emoji: "🐂" }, { name: "Real Sociedad", emoji: "🔵" },
-      { name: "FC Copenhagen", emoji: "❄️" }, { name: "AC Milan", emoji: "🔴" }, { name: "Shakhtar Donetsk", emoji: "🔶" },
-      { name: "Galatasaray", emoji: "🦁" }, { name: "Benfica", emoji: "🦅" }
+      { name: "Real Madrid" }, { name: "Bayern Munich" }, { name: "Manchester City" },
+      { name: "Paris Saint-Germain" }, { name: "Inter Milan" }, { name: "Arsenal" },
+      { name: "FC Barcelona" }, { name: "Borussia Dortmund" }, { name: "Atlético Madrid" },
+      { name: "Porto" }, { name: "PSV Eindhoven" }, { name: "Napoli" },
+      { name: "AS Roma" }, { name: "RB Leipzig" }, { name: "Real Sociedad" },
+      { name: "FC Copenhagen" }, { name: "AC Milan" }, { name: "Shakhtar Donetsk" },
+      { name: "Galatasaray" }, { name: "Benfica" }
     ],
     bundesliga: [
-      { name: "Bayer Leverkusen", emoji: "🔴" }, { name: "Bayern Munich", emoji: "🔴" }, { name: "VfB Stuttgart", emoji: "⚪" },
-      { name: "RB Leipzig", emoji: "🐂" }, { name: "Borussia Dortmund", emoji: "🟡" }, { name: "Eintracht Frankfurt", emoji: "🦅" },
-      { name: "SC Freiburg", emoji: "🌲" }, { name: "FC Augsburg", emoji: "🟢" }, { name: "TSG Hoffenheim", emoji: "🔷" },
-      { name: "Werder Bremen", emoji: "💚" }, { name: "FC Heidenheim", emoji: "🔴" }, { name: "VfL Wolfsburg", emoji: "🐺" },
-      { name: "Mainz 05", emoji: "🔴" }, { name: "Borussia Mönchengladbach", emoji: "🐎" }, { name: "FC Koln", emoji: "🐐" },
-      { name: "Union Berlin", emoji: "🟥" }, { name: "Bochum", emoji: "🔵" }, { name: "Darmstadt", emoji: "💙" },
-      { name: "St. Pauli", emoji: "🏴‍☠️" }, { name: "Holstein Kiel", emoji: "⚓" }
+      { name: "Bayer Leverkusen" }, { name: "Bayern Munich" }, { name: "VfB Stuttgart" },
+      { name: "RB Leipzig" }, { name: "Borussia Dortmund" }, { name: "Eintracht Frankfurt" },
+      { name: "SC Freiburg" }, { name: "FC Augsburg" }, { name: "TSG Hoffenheim" },
+      { name: "Werder Bremen" }, { name: "FC Heidenheim" }, { name: "VfL Wolfsburg" },
+      { name: "Mainz 05" }, { name: "Borussia Mönchengladbach" }, { name: "FC Koln" },
+      { name: "Union Berlin" }, { name: "Bochum" }, { name: "Darmstadt" },
+      { name: "St. Pauli" }, { name: "Holstein Kiel" }
     ],
     seriea: [
-      { name: "Inter Milan", emoji: "🔵" }, { name: "AC Milan", emoji: "🔴" }, { name: "Juventus", emoji: "🦓" },
-      { name: "Bologna", emoji: "🟥" }, { name: "Roma", emoji: "🐺" }, { name: "Atalanta", emoji: "🔵" },
-      { name: "Lazio", emoji: "🦅" }, { name: "Fiorentina", emoji: "🟣" }, { name: "Napoli", emoji: "💙" },
-      { name: "Torino", emoji: "🐂" }, { name: "Monza", emoji: "⚪" }, { name: "Genoa", emoji: "🔴" },
-      { name: "Lecce", emoji: "🟡" }, { name: "Verona", emoji: "🟡" }, { name: "Udinese", emoji: "⬛" },
-      { name: "Cagliari", emoji: "🟥" }, { name: "Empoli", emoji: "🔵" }, { name: "Sassuolo", emoji: "🟢" },
-      { name: "Salernitana", emoji: "🐎" }, { name: "Frosinone", emoji: "🦁" }
+      { name: "Inter Milan" }, { name: "AC Milan" }, { name: "Juventus" },
+      { name: "Bologna" }, { name: "AS Roma" }, { name: "Atalanta" },
+      { name: "Lazio" }, { name: "Fiorentina" }, { name: "Napoli" },
+      { name: "Torino" }, { name: "Monza" }, { name: "Genoa" },
+      { name: "Lecce" }, { name: "Verona" }, { name: "Udinese" },
+      { name: "Cagliari" }, { name: "Empoli" }, { name: "Sassuolo" },
+      { name: "Salernitana" }, { name: "Frosinone" }
     ],
     ligue1: [
-      { name: "Paris Saint-Germain", emoji: "🔵" }, { name: "Monaco", emoji: "🔴" }, { name: "Brest", emoji: "⛵" },
-      { name: "Lille", emoji: "🐕" }, { name: "Nice", emoji: "🦅" }, { name: "Lens", emoji: "🟡" },
-      { name: "Marseille", emoji: "⚪" }, { name: "Lyon", emoji: "🦁" }, { name: "Rennes", emoji: "🔴" },
-      { name: "Reims", emoji: "🟥" }, { name: "Toulouse", emoji: "🟣" }, { name: "Strasbourg", emoji: "💙" },
-      { name: "Montpellier", emoji: "🟧" }, { name: "Nantes", emoji: "🟡" }, { name: "Le Havre", emoji: "⚓" },
-      { name: "Metz", emoji: "🇱🇻" }, { name: "Lorient", emoji: "🐟" }, { name: "Clermont Foot", emoji: "⛰️" },
-      { name: "Auxerre", emoji: "🔵" }, { name: "Angers", emoji: "⬛" }
+      { name: "Paris Saint-Germain" }, { name: "Monaco" }, { name: "Brest" },
+      { name: "Lille" }, { name: "Nice" }, { name: "Lens" },
+      { name: "Marseille" }, { name: "Lyon" }, { name: "Rennes" },
+      { name: "Reims" }, { name: "Toulouse" }, { name: "Strasbourg" },
+      { name: "Montpellier" }, { name: "Nantes" }, { name: "Le Havre" },
+      { name: "Metz" }, { name: "Lorient" }, { name: "Clermont Foot" },
+      { name: "Auxerre" }, { name: "Angers" }
     ],
     wc: [
-      { name: "Argentina", emoji: "🇦🇷" }, { name: "France", emoji: "🇫🇷" }, { name: "Brazil", emoji: "🇧🇷" },
-      { name: "England", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { name: "Spain", emoji: "🇪🇸" }, { name: "Germany", emoji: "🇩🇪" },
-      { name: "Portugal", emoji: "🇵🇹" }, { name: "Netherlands", emoji: "🇳🇱" }, { name: "Belgium", emoji: "🇧🇪" },
-      { name: "Italy", emoji: "🇮🇹" }, { name: "Croatia", emoji: "🇭🇷" }, { name: "Uruguay", emoji: "🇺🇾" },
-      { name: "Colombia", emoji: "🇨🇴" }, { name: "Mexico", emoji: "🇲🇽" }, { name: "USA", emoji: "🇺🇸" },
-      { name: "Japan", emoji: "🇯🇵" }, { name: "Morocco", emoji: "🇲🇦" }, { name: "Senegal", emoji: "🇸🇳" },
-      { name: "South Korea", emoji: "🇰🇷" }, { name: "Australia", emoji: "🇦🇺" }
+      { name: "Argentina" }, { name: "France" }, { name: "Brazil" },
+      { name: "England" }, { name: "Spain" }, { name: "Germany" },
+      { name: "Portugal" }, { name: "Netherlands" }, { name: "Belgium" },
+      { name: "Italy" }, { name: "Croatia" }, { name: "Uruguay" },
+      { name: "Colombia" }, { name: "Mexico" }, { name: "USA" },
+      { name: "Japan" }, { name: "Morocco" }, { name: "Senegal" },
+      { name: "South Korea" }, { name: "Australia" }
     ]
   };
+
+  const stadiumList = [
+    "Santiago Bernabéu", "Spotify Camp Nou", "Wembley Stadium", "Old Trafford", "Anfield",
+    "Emirates Stadium", "Allianz Arena", "Signal Iduna Park", "San Siro", "Stadio Olimpico",
+    "Parc des Princes", "Stade Velodrome", "MetLife Stadium", "Maracanã Stadium", "Estadio Azteca",
+    "Lusail Stadium", "Johan Cruyff Arena", "Etihad Stadium", "Tottenham Hotspur Stadium", "Stamford Bridge",
+    "Diego Armando Maradona Stadium", "Estádio da Luz", "Veltins-Arena", "BayArena", "Ramón Sánchez Pizjuán",
+    "Mestalla Stadium", "Reale Arena", "San Mamés", "Benito Villamarín", "Hampden Park"
+  ];
+
+  const firstNames = ["Alex", "Carlos", "Mateo", "Lucas", "Gabriel", "Marco", "Daniel", "Julian", "Bruno", "Enzo", "Thiago", "Leo", "David", "Nicolas", "Samuel"];
+  const lastNames = ["Silva", "Santos", "Fernandez", "Gomez", "Lopez", "Martínez", "Rodriguez", "Perez", "Sanchez", "Ramirez", "Torres", "Flores", "Rivera", "Guzman", "Cruz"];
+
+  function generateUniqueTeamRoster(teamName) {
+    let roster = [];
+    let usedNames = new Set();
+    const positions = ["GK", "DEF", "DEF", "DEF", "DEF", "MID", "MID", "MID", "FWD", "FWD", "FWD"];
+
+    for (let i = 0; i < 11; i++) {
+      let pName;
+      do {
+        pName = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)];
+      } while (usedNames.has(pName));
+      usedNames.add(pName);
+
+      let rating = parseFloat((Math.random() * 1.5 + 7.5).toFixed(1));
+      roster.push({
+        name: pName,
+        pos: positions[i],
+        rating: rating,
+        type: "starter",
+        stats: positions[i] === 'GK' ? `${Math.floor(Math.random()*4)+2} Saves` : 
+               positions[i] === 'DEF' ? `${Math.floor(Math.random()*5)+2} Tackles` : 
+               positions[i] === 'MID' ? `${Math.floor(Math.random()*3)} Goals` : 
+               `${Math.floor(Math.random()*2)+1} Goals`
+      });
+    }
+
+    const subPositions = ["GK", "DEF", "MID", "FWD"];
+    for (let i = 0; i < 4; i++) {
+      let pName;
+      do {
+        pName = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)];
+      } while (usedNames.has(pName));
+      usedNames.add(pName);
+
+      let rating = parseFloat((Math.random() * 1.2 + 7.0).toFixed(1));
+      roster.push({
+        name: pName,
+        pos: subPositions[i],
+        rating: rating,
+        type: "sub",
+        stats: "Bench"
+      });
+    }
+
+    return roster;
+  }
+
+  function generateGoalScorers(homeTeam, awayTeam, homeScore, awayScore) {
+    let scorersText = [];
+    let usedMins = new Set();
+
+    for (let i = 0; i < homeScore; i++) {
+      let min;
+      do {
+        min = Math.floor(Math.random() * 85) + 3;
+      } while (usedMins.has(min));
+      usedMins.add(min);
+      let scorerName = lastNames[Math.floor(Math.random() * lastNames.length)];
+      scorersText.push(`${scorerName} ${min}'`);
+    }
+
+    for (let i = 0; i < awayScore; i++) {
+      let min;
+      do {
+        min = Math.floor(Math.random() * 85) + 3;
+      } while (usedMins.has(min));
+      usedMins.add(min);
+      let scorerName = lastNames[Math.floor(Math.random() * lastNames.length)];
+      scorersText.push(`${scorerName} ${min}'`);
+    }
+
+    scorersText.sort((a, b) => parseInt(a) - parseInt(b));
+    return scorersText.length > 0 ? `<i class="fa-solid fa-futbol"></i> ${scorersText.join(", ")}` : "No goals yet";
+  }
 
   let leaguesData = {};
 
   function generateLeagueData() {
+    let stadiumCounter = 0;
     for (let key in teamPools) {
       let teams = teamPools[key];
       let matches = [];
@@ -646,7 +887,7 @@
         let p = 25, w = Math.floor(Math.random() * 12) + 8, d = Math.floor(Math.random() * 6), l = p - w - d;
         let gf = w * 2 + d, ga = l * 2 + Math.floor(Math.random() * 3);
         standings.push({
-          rank: i + 1, name: t.name, emoji: t.emoji, p: p, w: w, d: d, l: l, gf: gf, ga: ga, pts: (w * 3) + d,
+          rank: i + 1, name: t.name, logo: getTeamLogo(t.name), p: p, w: w, d: d, l: l, gf: gf, ga: ga, pts: (w * 3) + d,
           form: ["W", "D", "W", "L", "W"]
         });
       }
@@ -658,17 +899,24 @@
         let homeTeam = teams[i % 20];
         let awayTeam = teams[(i + 7) % 20];
         if (homeTeam === awayTeam) awayTeam = teams[(i + 1) % 20];
+        let stadium = stadiumList[stadiumCounter % stadiumList.length];
+        stadiumCounter++;
+
+        let hScore = Math.floor(Math.random() * 3);
+        let aScore = Math.floor(Math.random() * 3);
+
         matches.push({
           id: key + "_live_" + matchIdCounter++,
           day: "Today",
           time: (Math.floor(Math.random() * 75) + 10) + "'",
           status: "live",
-          home: homeTeam.name, homeEmoji: homeTeam.emoji, homeScore: Math.floor(Math.random() * 4),
-          away: awayTeam.name, awayEmoji: awayTeam.emoji, awayScore: Math.floor(Math.random() * 3),
-          venue: "Main Arena", referee: "Official Ref", homeRec: "Form OK", awayRec: "Form OK",
-          timeline: [{ min: 15, type: 'goal', team: 'home', player: homeTeam.name + ' Star' }],
-          stats: { possession: [50, 50], shots: [12, 10], onTarget: [5, 4], fouls: [9, 11], yellow: [1, 2] },
-          commentary: [{ min: 15, type: 'goal', text: "Brilliant goal scored!" }]
+          home: homeTeam.name, homeLogo: getTeamLogo(homeTeam.name), homeScore: hScore,
+          away: awayTeam.name, awayLogo: getTeamLogo(awayTeam.name), awayScore: aScore,
+          venue: stadium, referee: "J. Martinez",
+          scorers: generateGoalScorers(homeTeam.name, awayTeam.name, hScore, aScore),
+          timeline: [{ min: 14, type: 'goal', team: 'home', player: 'Goal Scored' }],
+          players: { home: generateUniqueTeamRoster(homeTeam.name), away: generateUniqueTeamRoster(awayTeam.name) },
+          stats: { possession: [54, 46], shots: [14, 9], onTarget: [6, 4], fouls: [8, 12], yellow: [1, 3], red: [0, 0] }
         });
       }
 
@@ -677,16 +925,21 @@
         let homeTeam = teams[(i + 3) % 20];
         let awayTeam = teams[(i + 12) % 20];
         if (homeTeam === awayTeam) awayTeam = teams[(i + 2) % 20];
+        let stadium = stadiumList[stadiumCounter % stadiumList.length];
+        stadiumCounter++;
+
         matches.push({
           id: key + "_up_" + matchIdCounter++,
           day: "Tomorrow",
           time: "20:00",
           status: "upcoming",
-          home: homeTeam.name, homeEmoji: homeTeam.emoji, homeScore: 0,
-          away: awayTeam.name, awayEmoji: awayTeam.emoji, awayScore: 0,
-          venue: "City Stadium", referee: "TBD", homeRec: "Ready", awayRec: "Ready",
-          timeline: [], stats: { possession: [50, 50], shots: [0, 0], onTarget: [0, 0], fouls: [0, 0], yellow: [0, 0] },
-          commentary: [{ min: 0, type: 'info', text: "Match upcoming." }]
+          home: homeTeam.name, homeLogo: getTeamLogo(homeTeam.name), homeScore: 0,
+          away: awayTeam.name, awayLogo: getTeamLogo(awayTeam.name), awayScore: 0,
+          venue: stadium, referee: "TBD",
+          scorers: "Match not started",
+          timeline: [], 
+          players: { home: generateUniqueTeamRoster(homeTeam.name), away: generateUniqueTeamRoster(awayTeam.name) },
+          stats: { possession: [50, 50], shots: [0, 0], onTarget: [0, 0], fouls: [0, 0], yellow: [0, 0], red: [0, 0] }
         });
       }
 
@@ -695,17 +948,24 @@
         let homeTeam = teams[(i + 5) % 20];
         let awayTeam = teams[(i + 15) % 20];
         if (homeTeam === awayTeam) awayTeam = teams[(i + 4) % 20];
+        let stadium = stadiumList[stadiumCounter % stadiumList.length];
+        stadiumCounter++;
+
+        let hScore = Math.floor(Math.random() * 3) + 1;
+        let aScore = Math.floor(Math.random() * 3);
+
         matches.push({
           id: key + "_fin_" + matchIdCounter++,
           day: "Yesterday",
           time: "FT",
           status: "finished",
-          home: homeTeam.name, homeEmoji: homeTeam.emoji, homeScore: Math.floor(Math.random() * 3) + 1,
-          away: awayTeam.name, awayEmoji: awayTeam.emoji, awayScore: Math.floor(Math.random() * 3),
-          venue: "National Ground", referee: "Elite Ref", homeRec: "Done", awayRec: "Done",
-          timeline: [{ min: 80, type: 'goal', team: 'home', player: 'Winner Scorer' }],
-          stats: { possession: [52, 48], shots: [15, 11], onTarget: [7, 5], fouls: [10, 10], yellow: [2, 1] },
-          commentary: [{ min: 90, type: 'goal', text: "Full time whistle blown." }]
+          home: homeTeam.name, homeLogo: getTeamLogo(homeTeam.name), homeScore: hScore,
+          away: awayTeam.name, awayLogo: getTeamLogo(awayTeam.name), awayScore: aScore,
+          venue: stadium, referee: "A. Taylor",
+          scorers: generateGoalScorers(homeTeam.name, awayTeam.name, hScore, aScore),
+          timeline: [{ min: 25, type: 'goal', team: 'home', player: 'Goal Scored' }],
+          players: { home: generateUniqueTeamRoster(homeTeam.name), away: generateUniqueTeamRoster(awayTeam.name) },
+          stats: { possession: [48, 52], shots: [11, 15], onTarget: [4, 7], fouls: [10, 9], yellow: [2, 2], red: [0, 1] }
         });
       }
 
@@ -728,6 +988,9 @@
   let searchQuery = "";
   let isSimulating = true;
   let simulationTimer = null;
+  let activeMatchId = null;
+  let currentMatchTab = 'overview';
+  let activeLineupTeam = 'home';
 
   document.addEventListener("DOMContentLoaded", () => {
     updateDateDisplay();
@@ -779,9 +1042,13 @@
       if (!league) return;
       let updated = false;
       league.matches.forEach(m => {
-        if (m.status === 'live' && Math.random() < 0.2) {
-          if (Math.random() > 0.5) m.homeScore++;
-          else m.awayScore++;
+        if (m.status === 'live' && Math.random() < 0.15) {
+          if (Math.random() > 0.5) {
+            m.homeScore++;
+          } else {
+            m.awayScore++;
+          }
+          m.scorers = generateGoalScorers(m.home, m.away, m.homeScore, m.awayScore);
           updated = true;
         }
       });
@@ -837,23 +1104,26 @@
             let center = m.status === 'live' ? `
               <div class="score-box"><span class="score-num">${m.homeScore}</span><span class="score-sep">-</span><span class="score-num">${m.awayScore}</span></div>
               <div class="status-pill live"><div class="pulse-dot" style="width:5px; height:5px; background:var(--live);"></div> LIVE ${m.time}</div>
+              <div class="goal-scorers-mini">${m.scorers}</div>
             ` : m.status === 'upcoming' ? `
               <div class="match-time-text">${m.time}</div>
               <div class="status-pill upcoming">UPCOMING</div>
+              <div class="goal-scorers-mini">Starts soon</div>
             ` : `
               <div class="score-box"><span class="score-num" style="color:var(--fin);">${m.homeScore}</span><span class="score-sep">-</span><span class="score-num" style="color:var(--fin);">${m.awayScore}</span></div>
               <div class="status-pill finished">FT</div>
+              <div class="goal-scorers-mini">${m.scorers}</div>
             `;
 
             html += `
               <div class="match-card ${m.status}" onclick="openModal('${m.id}')">
                 <div class="team">
-                  <div class="team-badge">${m.homeEmoji}</div>
+                  <div class="team-badge"><img src="${m.homeLogo}" alt="${m.home}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span style="display:none">${m.home[0]}</span></div>
                   <div class="team-info"><div class="team-name">${m.home}</div><div class="team-record">Squad A</div></div>
                 </div>
-                <div class="match-center">${center}<div class="match-meta">${m.venue}</div></div>
+                <div class="match-center">${center}<div class="match-meta"><i class="fa-solid fa-location-dot"></i> ${m.venue}</div></div>
                 <div class="team away">
-                  <div class="team-badge">${m.awayEmoji}</div>
+                  <div class="team-badge"><img src="${m.awayLogo}" alt="${m.away}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span style="display:none">${m.away[0]}</span></div>
                   <div class="team-info"><div class="team-name">${m.away}</div><div class="team-record">Squad B</div></div>
                 </div>
               </div>
@@ -869,7 +1139,7 @@
         rows += `
           <tr>
             <td class="rank-cell">${s.rank}</td>
-            <td><div class="team-cell"><span>${s.emoji}</span><span>${s.name}</span></div></td>
+            <td><div class="team-cell"><img src="${s.logo}" alt="${s.name}" onerror="this.style.display='none'"><span>${s.name}</span></div></td>
             <td>${s.p}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td>
             <td>${s.gf}</td><td>${s.ga}</td><td>${s.gf - s.ga}</td><td><strong>${s.pts}</strong></td>
             <td><div class="form-dots">${formHTML}</div></td>
@@ -893,28 +1163,148 @@
     document.getElementById("main-content").innerHTML = html;
   }
 
+  // --- Match Modal Tabs & Lineups Logic ---
   function openModal(id) {
+    activeMatchId = id;
+    currentMatchTab = 'overview';
+    activeLineupTeam = 'home';
+    document.querySelectorAll('.match-tab-btn').forEach((btn, idx) => {
+      btn.classList.toggle('active', idx === 0);
+    });
+    renderModalContent();
+    document.getElementById("matchModal").classList.add("open");
+  }
+
+  function switchMatchTab(tab) {
+    currentMatchTab = tab;
+    document.querySelectorAll('.match-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tab));
+    });
+    renderModalContent();
+  }
+
+  function switchLineupTeam(side) {
+    activeLineupTeam = side;
+    renderModalContent();
+  }
+
+  function renderModalContent() {
     let league = leaguesData[currentLeague];
-    let m = league.matches.find(x => x.id === id);
+    let m = league.matches.find(x => x.id === activeMatchId);
     if (!m) return;
 
-    document.getElementById("modalContentHeader").innerText = `${m.home} vs ${m.away} — Match Details`;
-    document.getElementById("modalBodyContent").innerHTML = `
-      <div style="text-align:center; margin-bottom:20px;">
-        <h2 style="font-size:32px; font-family:'Barlow Condensed';">${m.homeScore} - ${m.awayScore}</h2>
-        <p style="color:var(--sub);">${m.venue} | Referee: ${m.referee}</p>
-      </div>
-      <h3 style="font-size:14px; margin-bottom:10px; color:var(--accent-la);">Possession & Stats</h3>
-      <div style="background:var(--card); padding:12px; border-radius:8px; margin-bottom:15px;">
-        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span>${m.stats.possession[0]}%</span><span>Possession</span><span>${m.stats.possession[1]}%</span></div>
-        <div style="display:flex; justify-content:space-between; font-size:12px;"><span>Shots: ${m.stats.shots[0]}</span><span>On Target: ${m.stats.onTarget[0]} vs ${m.stats.onTarget[1]}</span><span>Shots: ${m.stats.shots[1]}</span></div>
-      </div>
-      <h3 style="font-size:14px; margin-bottom:10px; color:var(--accent-la);">Live Commentary</h3>
-      <div style="background:var(--card); padding:12px; border-radius:8px; font-size:13px;">
-        ${m.commentary.map(c => `<p><b>${c.min}'</b> - ${c.text}</p>`).join('')}
+    document.getElementById("modalContentHeader").innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+        <img src="${m.homeLogo}" style="width:24px; height:24px; object-fit:contain;" /> 
+        <span>${m.home} vs ${m.away}</span> 
+        <img src="${m.awayLogo}" style="width:24px; height:24px; object-fit:contain;" />
       </div>
     `;
-    document.getElementById("matchModal").classList.add("open");
+    let bodyHtml = "";
+
+    if (currentMatchTab === 'overview') {
+      bodyHtml = `
+        <div style="text-align:center; margin-bottom:20px;">
+          <h2 style="font-size:36px; font-family:'Barlow Condensed';">${m.homeScore} - ${m.awayScore}</h2>
+          <div style="font-size:12px; color:var(--live); margin-bottom:6px;">${m.scorers}</div>
+          <p style="color:var(--sub); font-size:12px;"><i class="fa-solid fa-location-dot" style="color:var(--accent-la);"></i> Stadium: ${m.venue} | Referee: ${m.referee}</p>
+        </div>
+        <div style="background:var(--card); padding:16px; border-radius:10px; display:flex; justify-content:space-around; text-align:center;">
+          <div><div style="font-size:12px; color:var(--sub);">Possession</div><div style="font-size:18px; font-weight:700;">${m.stats.possession[0]}% - ${m.stats.possession[1]}%</div></div>
+          <div><div style="font-size:12px; color:var(--sub);">Total Shots</div><div style="font-size:18px; font-weight:700;">${m.stats.shots[0]} - ${m.stats.shots[1]}</div></div>
+        </div>
+      `;
+    } else if (currentMatchTab === 'timeline') {
+      bodyHtml = `
+        <div style="background:var(--card); padding:16px; border-radius:10px; text-align:center; margin-bottom:12px;">
+          <div style="font-size:12px; color:var(--sub);">Goal Scorers Summary</div>
+          <div style="font-size:13px; font-weight:700; color:var(--live); margin-top:4px;">${m.scorers}</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:var(--card); padding:10px 14px; border-radius:8px; display:flex; align-items:center; gap:12px;">
+            <span style="font-weight:700; color:var(--accent-la);">Match Started</span>
+            <span><i class="fa-solid fa-clock"></i> Live telemetry active</span>
+          </div>
+        </div>
+      `;
+    } else if (currentMatchTab === 'lineup') {
+      let allPlayers = m.players[activeLineupTeam];
+      let starters = allPlayers.filter(p => p.type === 'starter');
+      let subs = allPlayers.filter(p => p.type === 'sub');
+
+      bodyHtml = `
+        <div class="lineup-team-selector">
+          <button class="lineup-team-btn ${activeLineupTeam === 'home' ? 'active' : ''}" onclick="switchLineupTeam('home')">
+            <img src="${m.homeLogo}" /> ${m.home} Squad
+          </button>
+          <button class="lineup-team-btn ${activeLineupTeam === 'away' ? 'active' : ''}" onclick="switchLineupTeam('away')">
+            <img src="${m.awayLogo}" /> ${m.away} Squad
+          </button>
+        </div>
+
+        <div class="lineup-section-title">Starting XI (11 Players)</div>
+        <div class="players-list-grid">
+      `;
+      
+      starters.forEach(p => {
+        let rClass = p.rating >= 8.5 ? 'rating-high' : p.rating >= 7.8 ? 'rating-mid' : 'rating-normal';
+        bodyHtml += `
+          <div class="player-card">
+            <div class="player-card-left">
+              <div class="player-avatar"><i class="fa-solid fa-user"></i></div>
+              <div class="player-info">
+                <div class="player-name-text">${p.name} <span class="player-pos-tag">(${p.pos})</span></div>
+                <div class="player-stats-mini"><i class="fa-solid fa-chart-line"></i> ${p.stats}</div>
+              </div>
+            </div>
+            <div class="rating-badge ${rClass}">${p.rating}</div>
+          </div>
+        `;
+      });
+
+      bodyHtml += `</div><div class="lineup-section-title" style="margin-top:20px;">Substitutes (4 Players)</div><div class="players-list-grid">`;
+
+      subs.forEach(p => {
+        let rClass = p.rating >= 8.0 ? 'rating-high' : p.rating >= 7.4 ? 'rating-mid' : 'rating-normal';
+        bodyHtml += `
+          <div class="player-card">
+            <div class="player-card-left">
+              <div class="player-avatar"><i class="fa-solid fa-user-clock"></i></div>
+              <div class="player-info">
+                <div class="player-name-text">${p.name} <span class="player-pos-tag">(${p.pos} - SUB)</span></div>
+                <div class="player-stats-mini"><i class="fa-solid fa-info-circle"></i> ${p.stats}</div>
+              </div>
+            </div>
+            <div class="rating-badge ${rClass}">${p.rating}</div>
+          </div>
+        `;
+      });
+
+      bodyHtml += `</div>`;
+    } else if (currentMatchTab === 'stats') {
+      bodyHtml = `
+        <div style="background:var(--card); padding:16px; border-radius:10px; display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;"><span>${m.stats.possession[0]}%</span><span>Possession</span><span>${m.stats.possession[1]}%</span></div>
+            <div style="height:6px; background:var(--border); border-radius:3px; overflow:hidden; display:flex;"><div style="width:${m.stats.possession[0]}%; background:var(--accent-la);"></div><div style="width:${m.stats.possession[1]}%; background:var(--upcoming);"></div></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;"><span>${m.stats.shots[0]}</span><span>Shots</span><span>${m.stats.shots[1]}</span></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;"><span>${m.stats.onTarget[0]}</span><span>Shots on Target</span><span>${m.stats.onTarget[1]}</span></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;"><span>${m.stats.fouls[0]}</span><span>Fouls</span><span>${m.stats.fouls[1]}</span></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;"><span>${m.stats.yellow[0]}</span><span>Yellow Cards</span><span>${m.stats.yellow[1]}</span></div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("modalBodyContent").innerHTML = bodyHtml;
   }
 
   function closeModal() {
@@ -923,6 +1313,75 @@
 
   function closeModalOnBackdrop(e) {
     if (e.target.id === 'matchModal') closeModal();
+  }
+
+  // --- Auth Management ---
+  function openAuthModal(type) {
+    const titleEl = document.getElementById("authModalTitle");
+    const bodyEl = document.getElementById("authModalBody");
+
+    if (type === 'login') {
+      titleEl.innerText = "Login to FootHub";
+      bodyEl.innerHTML = `
+        <form class="auth-form" onsubmit="handleAuthSubmit(event, 'login')">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="name@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required />
+          </div>
+          <button type="submit" class="form-submit-btn">Login</button>
+        </form>
+      `;
+    } else {
+      titleEl.innerText = "Create an Account";
+      bodyEl.innerHTML = `
+        <form class="auth-form" onsubmit="handleAuthSubmit(event, 'register')">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="name@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required />
+          </div>
+          <button type="submit" class="form-submit-btn">Register</button>
+        </form>
+      `;
+    }
+    document.getElementById("authModal").classList.add("open");
+  }
+
+  function closeAuthModal() {
+    document.getElementById("authModal").classList.remove("open");
+  }
+
+  function closeAuthModalOnBackdrop(e) {
+    if (e.target.id === 'authModal') closeAuthModal();
+  }
+
+  function handleAuthSubmit(e, action) {
+    e.preventDefault();
+    alert(action === 'login' ? "Successfully Logged In!" : "Account Registered Successfully!");
+    closeAuthModal();
+    document.getElementById("authButtonGroup").innerHTML = `
+      <span style="font-size:13px; font-weight:600; color:var(--live);">👤 Hi, User</span>
+      <button class="auth-btn" onclick="handleLogout()">Logout</button>
+    `;
+  }
+
+  function handleLogout() {
+    alert("Logged out successfully.");
+    document.getElementById("authButtonGroup").innerHTML = `
+      <button class="auth-btn" onclick="openAuthModal('login')">Login</button>
+      <button class="auth-btn primary" onclick="openAuthModal('register')">Register</button>
+    `;
   }
 </script>
 </body>
